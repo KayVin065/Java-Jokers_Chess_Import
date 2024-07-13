@@ -31,10 +31,10 @@ public class Jokers
             System.out.println("Player " + /*function to get currentTurn */  " enter your move. Ex. E2 E4: "); //FIXME 
 
             String moveInput = scanner.nextLine().toUpperCase();
-            /*if(!isValidMoveInput(moveInput)) {
+            if(!isValidMoveInput(moveInput)) {
                 System.out.println("Invalid move format. Try again.");
                 continue;
-            }*/
+            }
 
             int startX = moveInput.charAt(0);
             int startY = moveInput.charAt(1);

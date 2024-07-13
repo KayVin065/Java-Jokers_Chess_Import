@@ -4,7 +4,7 @@ public class Jokers
     {
         Board GameBoard = new Board();
         /**
-         * TODO: get user input()
+         * TODO: get user input()-aj
          * TODO: translate user input in location variables
          * TODO: Set move set for the pieces()
          * TODO: Create play game

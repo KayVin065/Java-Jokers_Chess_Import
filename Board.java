@@ -1,13 +1,13 @@
-
 public final class Board 
 {
-    public static final char[] sBoard = null;
     public Piece[][] board = new Piece[8][8];
 
     public Board()
     {
         SetupBoard();
     }
+
+
 
     //this intializes all spots to null so like theirs something ig
     private void SetupBoard()
@@ -81,10 +81,12 @@ public final class Board
     {
         String string = "";
         int ChessNum = 0;
+        System.out.println("   A  B  C  D  E  F  G  H ");
+        int numDisplay = 8;
+        string += numDisplay + "  ";
         for(Piece[] row: board)
         {
             int ChessCount = 0;
-
             for(Piece piece : row)
             {
                 if(piece == null)
@@ -123,8 +125,14 @@ public final class Board
                 string += " ";
                 ChessCount ++;
             }
+            ChessNum++;
             string += "\n";
-            ChessNum++;    
+            if(numDisplay > 1)
+            { 
+                numDisplay--;
+                string += numDisplay + "  ";
+            }
+
         }
         return string;
     }

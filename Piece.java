@@ -1,3 +1,4 @@
+
 public abstract class Piece {
     public String color;
     public boolean moved;

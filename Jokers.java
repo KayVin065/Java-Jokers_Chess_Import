@@ -56,7 +56,8 @@ public class Jokers
     }
 
     //MIGHT MOVE THIS
-    private static boolean isValidMoveInput (String input) {
+    private static boolean isValidMoveInput (String input) 
+    {
         return input.matches("[A-H][1-8] [A-H][1-8]");
     }
 }

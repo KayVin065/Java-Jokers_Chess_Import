@@ -5,4 +5,5 @@ public String MakeString()
     {
         return color.charAt(0) + "P";
     }
+    
 }

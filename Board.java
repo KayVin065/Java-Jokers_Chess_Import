@@ -19,16 +19,16 @@ public final class Board
         }
      
     
-        /*8 BR BN BB BQ BQ BB BK BR
-        * 7 BP BP BP BP BP BP BP BP
-        * 6    ##    ##    ##    ##
-        * 5 ##    ##    ##    ##
-        * 4    ##    ##    ##    ##
-        * 3 ##    ##    ##    ##
-        * 2 WP WP WP WP WP WP WP WP
-        * 1 WR WK WB WQ WK WB WK WR
+        /*8 BR BN BB BQ BQ BB BK BR [0]
+        * 7 BP BP BP BP BP BP BP BP [1]
+        * 6    ##    ##    ##    ## [2]
+        * 5 ##    ##    ##    ##    [3]
+        * 4    ##    ##    ##    ## [4]
+        * 3 ##    ##    ##    ##    [5]
+        * 2 WP WP WP WP WP WP WP WP [6]
+        * 1 WR WK WB WQ WK WB WK WR [7]
         *   A  B  C  D  E  F  G  H
-        * 
+        *  [0][1][2][3][4][5][6][7]
         * REMEMBER first part of the array is 1-8 (also [0] = 1), 2nd part is A-H
         */
 
@@ -77,11 +77,60 @@ public final class Board
         System.out.println(MakeString());
     }
 
+    public static int translateMove(char x)
+    {
+        switch (x) 
+        {
+            case '8', 'A' -> {
+                return 0;
+            }
+            case '7', 'B' -> {
+                return 1;
+            }
+            case '6', 'C' -> {
+                return 2;
+            }
+            case '5', 'D' -> {
+                return 3;
+            }
+            case '4', 'E' -> {
+                return 4;
+            }
+            case '3', 'F' -> {
+                return 5;
+            }
+            case '2', 'G' -> {
+                return 6;
+            }
+            case '1', 'H' -> {
+                return 7;
+            }
+            default -> throw new AssertionError();
+        }
+    }
+
+    public void movePiece(String begin, String End)
+    {
+        System.out.println("i am seen");
+        int iPosy = translateMove(begin.charAt(0));
+        int iPosx = translateMove(begin.charAt(1));
+        int fPosy = translateMove(End.charAt(0));
+        int fPosx = translateMove(End.charAt(1));
+
+        Piece swap = board[iPosx][iPosy];
+        board[iPosx][iPosy] = null;
+        board[fPosx][fPosy] = swap;
+        System.out.println(MakeString());
+
+    }
+
+    
+
     public String MakeString()
     {
+        System.out.println("   A  B  C  D  E  F  G  H ");
         String string = "";
         int ChessNum = 0;
-        System.out.println("   A  B  C  D  E  F  G  H ");
         int numDisplay = 8;
         string += numDisplay + "  ";
         for(Piece[] row: board)

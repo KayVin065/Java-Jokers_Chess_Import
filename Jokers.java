@@ -29,16 +29,22 @@ public class Jokers
          while (true) {
             System.out.println("Player " + /*function to get currentTurn */  " enter your move. Ex. E2 E4: "); //FIXME 
 
-            String moveInput = scanner.nextLine().toUpperCase();
-            /*if(!isValidMoveInput(moveInput)) {
+            String moveInput = scanner.next().toUpperCase();
+            String DestinationInput = scanner.next().toUpperCase();
+            /*if(!isValidMoveInput(moveInput))
+             {
                 System.out.println("Invalid move format. Try again.");
                 continue;
             }*/
+            GameBoard.movePiece(moveInput, DestinationInput);
 
+
+            /* 
             int startX = moveInput.charAt(0);
             int startY = moveInput.charAt(1);
             int endX = moveInput.charAt(3);
             int endY = moveInput.charAt(4);
+            */
 
             /*try {
             boolean moveSuccessful = ; // FIXME x will be function to check if move is even valid 

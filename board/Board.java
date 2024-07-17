@@ -47,7 +47,7 @@ public class Board {
 
             for(int j = 0; j < 8; j++) {
                 if(board[i][j].piece != null) {
-                    System.out.print(board[i][j].piece.toString());
+                    System.out.print(" " + board[i][j].piece.toString());
                 } else {
                     System.out.print(board[i][j].originalPlacement);
                 }
@@ -126,20 +126,18 @@ public class Board {
 
     /**
      * Takes in two Strings that represent the user input coordinates
-     * @param begin String representing the "from" coordinate
-     * @param end String representing the "to" coordinate
+     * @param input String representing the "to" and "from" coordinates as one line
      */
-    public void movePiece(String begin, String end)
+    public void movePiece(String input)
     {
-        int fromPosy = translateMove(begin.charAt(0));
-        int fromPosx = translateMove(begin.charAt(1));
-        int toPosy = translateMove(end.charAt(0));
-        int toPosx = translateMove(end.charAt(1));
+        int fromPosy = translateMove(input.charAt(0));
+        int fromPosx = translateMove(input.charAt(1));
+        int toPosy = translateMove(input.charAt(3));
+        int toPosx = translateMove(input.charAt(4));
 
-        Piece swap = board[fromPosx][fromPosy].piece;
+        Piece temp = board[fromPosx][fromPosy].piece;
         board[fromPosx][fromPosy].piece = null;
-        board[toPosx][toPosy].piece = swap;
+        board[toPosx][toPosy].piece = temp;
         display();
-        //System.out.println("heyyyyy");
     }
 }

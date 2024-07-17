@@ -1,4 +1,7 @@
 package piece;
+
+import board.*;
+
 public class Knight extends Piece {
     private String color;
     private char firstChar;
@@ -16,7 +19,18 @@ public class Knight extends Piece {
      * Outputs a list of possible moves that the Knight can make
      */
     @Override
-    public boolean possibleMove() {
+    public boolean validMove(Spot[][] board, Spot start, Spot end) {
+        if (end.getPiece() != null && end.getPiece().getColor() == this.getColor()) {
+            return false;
+        }
+
+        int x = Math.abs(start.getX() - end.getX());
+        int y = Math.abs(start.getY() - end.getY());
+
+        if (x * y == 2) {
+            return true;
+        }
+        
         return false;
     }
 

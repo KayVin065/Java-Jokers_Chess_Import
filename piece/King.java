@@ -1,4 +1,7 @@
 package piece;
+
+import board.*;
+
 public class King extends Piece {
     private String color;
     private char firstChar;
@@ -13,11 +16,18 @@ public class King extends Piece {
     }
 
     /**
-     * Outputs a list of possible moves that the King can make
+     * Validates whether the move inputted by the user is valid for this piece
      */
     @Override
-    public boolean possibleMove() {
-        return false;
+    public boolean validMove(Spot[][] board, Spot start, Spot end) {
+        if (end.getPiece() != null && end.getPiece().getColor() == this.getColor()) {
+            return false;
+        }
+
+        int x = Math.abs(start.getX() - end.getX());
+        int y = Math.abs(start.getY() - end.getY());
+
+        return x <= 1 && y <= 1;
     }
 
     @Override

@@ -23,6 +23,21 @@ public class Spot {
         this.piece = piece;
         this.originalPlacement = originalPlacement;
     }
+
+    // Function to return the caller's x coordinate
+    public int getX () {
+        return x;
+    }
+
+    // Function to return the caller's y coordinate
+    public int getY () {
+        return y;
+    }
+
+    // Function that returns the piece in a spot
+    public Piece getPiece () {
+        return piece;
+    }
 }
 /*
     // Subclass of Spot for Empty Spot Initialization

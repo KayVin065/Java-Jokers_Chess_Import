@@ -1,8 +1,12 @@
+package piece;
+
+import board.*;
+
 /**
  * Represents a Pawn piece in a chess game
  * Subclass of the Piece class
  */
-package piece;
+
 public class Pawn extends Piece {
     private String color;
     private char firstChar;
@@ -20,8 +24,13 @@ public class Pawn extends Piece {
      * Outputs a list of possible moves that the Pawn can make
      */
     @Override
-    public boolean possibleMove() {
-        return false;
+    public boolean validMove(Spot[][] board, Spot start, Spot end) {
+        if (end.getPiece() != null && end.getPiece().getColor() == this.getColor()) {
+            return false;
+        }
+
+        //not implemented yet
+        return true;
     }
 
     @Override

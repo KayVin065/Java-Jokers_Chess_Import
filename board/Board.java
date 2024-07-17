@@ -44,9 +44,9 @@ public class Board {
      * @param from Position object for "from" coordinates
      * @param to Position object for "to" coordinates
      */
-    public void movePiece(Position from, Position to) {
+    /* public void movePiece(Position from, Position to) {
 
-    }
+    } i commented this
 
     /**
      * Displays a blank board with rows numbered 1-8 and columns labeled A-H

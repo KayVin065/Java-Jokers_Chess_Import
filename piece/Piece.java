@@ -1,4 +1,5 @@
 package piece;
+import board.*;
 public abstract class Piece {
     protected String color;
     protected boolean isCaptured = false;
@@ -11,5 +12,5 @@ public abstract class Piece {
         return this.color;
     }
 
-    public abstract boolean possibleMove();
+    public abstract boolean validMove(Spot[][] board, Spot start, Spot end);
 }

@@ -10,6 +10,10 @@ public class Chess {
         String temp2 = orb.getUserInput(temp);
         System.out.println(temp2);
 
+        /*System.out.println("Checking possible move func");
+        System.out.println(board[7][2].getPiece());
+        System.out.println("Checking possible move func");*/
+
 
     }
 
@@ -24,6 +28,9 @@ public class Chess {
 
         board.display();
         System.out.println("Enter move formatted as \"[FROM] [TO]\" EX: \"E2 E4\": ");
+
+       
+
 
     }
 

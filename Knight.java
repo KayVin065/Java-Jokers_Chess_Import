@@ -1,9 +1,11 @@
 public class Knight extends Piece
 {
     public Knight(String color){this.color = color;}
-    public String MakeString()
+    @Override
+    boolean MoveSet(String initialLocation, String FinalLocation)
     {
+        //allowed moves go here
         
-        return color.charAt(0) + "N";
+        return true;
     }
 }

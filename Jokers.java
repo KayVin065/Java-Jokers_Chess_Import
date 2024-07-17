@@ -31,20 +31,13 @@ public class Jokers
 
             String moveInput = scanner.next().toUpperCase();
             String DestinationInput = scanner.next().toUpperCase();
-            /*if(!isValidMoveInput(moveInput))
+            if(!isValidMoveInput(moveInput) && !isValidMoveInput(DestinationInput))
              {
                 System.out.println("Invalid move format. Try again.");
                 continue;
-            }*/
+            }
             GameBoard.movePiece(moveInput, DestinationInput);
 
-
-            /* 
-            int startX = moveInput.charAt(0);
-            int startY = moveInput.charAt(1);
-            int endX = moveInput.charAt(3);
-            int endY = moveInput.charAt(4);
-            */
 
             /*try {
             boolean moveSuccessful = ; // FIXME x will be function to check if move is even valid 
@@ -65,5 +58,6 @@ public class Jokers
     private static boolean isValidMoveInput (String input) 
     {
         return input.matches("[A-H][1-8] [A-H][1-8]");
+        
     }
 }

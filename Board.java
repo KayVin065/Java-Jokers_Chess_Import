@@ -109,19 +109,19 @@ public final class Board
         }
     }
 
-    public void movePiece(String begin, String End)
+    public void movePiece(String Begin, String End)
     {
-        System.out.println("i am seen");
-        int iPosy = translateMove(begin.charAt(0));
-        int iPosx = translateMove(begin.charAt(1));
+        int iPosy = translateMove(Begin.charAt(0));
+        int iPosx = translateMove(Begin.charAt(1));
         int fPosy = translateMove(End.charAt(0));
         int fPosx = translateMove(End.charAt(1));
+        
 
         Piece swap = board[iPosx][iPosy];
         board[iPosx][iPosy] = null;
         board[fPosx][fPosy] = swap;
+        board[fPosx][fPosy].moved = true;
         System.out.println(MakeString());
-
     }
 
     

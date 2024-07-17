@@ -6,9 +6,13 @@ import piece.*;
 
 public class Board {
     public Spot[][] board = new Spot[8][8];
+    protected char newTempPositionX;
+    protected char newTempPositionY;
+    protected char oldTempPositionX;
+    protected char oldTempPositionY;
 
     /**
-     * Initializes an 8x8 board
+     * Initializes an 8x8 board with pieces in original positions
      */
     public Board() {
         int spotNum = 0;
@@ -26,31 +30,9 @@ public class Board {
         setOriginalPieces();
     }
 
-
-    /*
-     * Returns information for the Piece at pos Position
-     * @param pos Desired user input Position
-     * @return Returns the Piece at input Position
-     */
-    /*
-    public Piece getPiece(Position pos) {
-        // temporary nonsense
-        Rook temp = new Rook("white");
-        return temp;
-    } */
-
     /**
-     * Moves the piece at "from" position to "to" position on the board
-     * @param from Position object for "from" coordinates
-     * @param to Position object for "to" coordinates
-     */
-    public void movePiece(Position from, Position to) {
-
-    }
-
-    /**
-     * Displays a blank board with rows numbered 1-8 and columns labeled A-H
-     * Board will be updated to display pieces
+     * Displays a board with rows numbered 1-8 and columns labeled A-H
+     * This will be called every time the board is updated or displayed
      */
     public void display() {
         int columnNum = 8;
@@ -103,5 +85,61 @@ public class Board {
         board[7][5].piece = new Bishop("white");
         board[7][6].piece = new Knight("white");
         board[7][7].piece = new Rook("white");
+    }
+
+    /**
+     * Takes in user input and translates character into an int. Creates ints to be 
+     * used as actual element numbers for the board
+     * @param x The character that is supposed to be translated into an int
+     * @return Returns the translated number to aid with coordinate conversion
+     */
+    public static int translateMove(char x) {
+        switch (x)
+        {
+            case '8', 'A' -> {
+                return 0;
+            }
+            case '7', 'B' -> {
+                return 1;
+            }
+            case '6', 'C' -> {
+                return 2;
+            }
+            case '5', 'D' -> {
+                return 3;
+            }
+            case '4', 'E' -> {
+                return 4;
+            }
+            case '3', 'F' -> {
+                return 5;
+            }
+            case '2', 'G' -> {
+                return 6;
+            }
+            case '1', 'H' -> {
+                return 7;
+            }
+            default -> throw new AssertionError();
+        }
+    }
+
+    /**
+     * Takes in two Strings that represent the user input coordinates
+     * @param begin String representing the "from" coordinate
+     * @param end String representing the "to" coordinate
+     */
+    public void movePiece(String begin, String end)
+    {
+        int fromPosy = translateMove(begin.charAt(0));
+        int fromPosx = translateMove(begin.charAt(1));
+        int toPosy = translateMove(end.charAt(0));
+        int toPosx = translateMove(end.charAt(1));
+
+        Piece swap = board[fromPosx][fromPosy].piece;
+        board[fromPosx][fromPosy].piece = null;
+        board[toPosx][toPosy].piece = swap;
+        display();
+        //System.out.println("heyyyyy");
     }
 }

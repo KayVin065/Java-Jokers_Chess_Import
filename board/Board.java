@@ -142,4 +142,12 @@ public class Board {
         display();
         //System.out.println("heyyyyy");
     }
+
+    /** Method to return spot at given coordinates
+    * @param x x-coordinate of spot
+    * @param y y-coordinate of spot
+    */
+    public Spot getBox(int x, int y) {
+        return board[x][y];
+    }
 }

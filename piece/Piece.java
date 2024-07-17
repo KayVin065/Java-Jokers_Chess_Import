@@ -12,5 +12,5 @@ public abstract class Piece {
         return this.color;
     }
 
-    public abstract boolean validMove(Spot[][] board, Spot start, Spot end);
+    public abstract boolean validMove(Board board, Spot start, Spot end);
 }

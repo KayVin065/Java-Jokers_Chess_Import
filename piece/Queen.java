@@ -23,8 +23,8 @@ public class Queen extends Piece {
      * Validates whether user input is valid move
      */
     @Override
-    public boolean validMove(Spot[][] board, Spot start, Spot end) {
-        if (end.getPiece() != null && end.getPiece().getColor() == this.getColor()) {
+    public boolean validMove(Board board, Spot start, Spot end) {
+        if (end.getPiece() != null && end.getPiece().getColor().equals(this.getColor())) {
             return false;
         }
 
@@ -38,14 +38,14 @@ public class Queen extends Piece {
             int xCurrent = start.getX() + xDirection;
             int yCurrent = start.getY() + yDirection;
 
-            /*  Check all spots along the path to ensure there are no pieces in the way
+            // Check all spots along the path to ensure there are no pieces in the way
             while (xCurrent != end.getX() || yCurrent != end.getY()) {
                 if (board.getBox(xCurrent, yCurrent).getPiece() != null) {
                     return false;
                 }
                 xCurrent += xDirection;
                 yCurrent += yDirection;
-            }*/
+            }
 
             return true;
         }

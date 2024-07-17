@@ -19,8 +19,8 @@ public class Knight extends Piece {
      * Outputs a list of possible moves that the Knight can make
      */
     @Override
-    public boolean validMove(Spot[][] board, Spot start, Spot end) {
-        if (end.getPiece() != null && end.getPiece().getColor() == this.getColor()) {
+    public boolean validMove(Board board, Spot start, Spot end) {
+        if (end.getPiece() != null && end.getPiece().getColor().equals(this.getColor())) {
             return false;
         }
 

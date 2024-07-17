@@ -19,8 +19,8 @@ public class King extends Piece {
      * Validates whether the move inputted by the user is valid for this piece
      */
     @Override
-    public boolean validMove(Spot[][] board, Spot start, Spot end) {
-        if (end.getPiece() != null && end.getPiece().getColor() == this.getColor()) {
+    public boolean validMove(Board board, Spot start, Spot end) {
+        if (end.getPiece() != null && end.getPiece().getColor().equals(this.getColor())) {
             return false;
         }
 

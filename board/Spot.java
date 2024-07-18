@@ -23,23 +23,28 @@ public class Spot {
         this.piece = piece;
         this.originalPlacement = originalPlacement;
     }
-}
-/*
-    // Subclass of Spot for Empty Spot Initialization
-    class emptySpot extends Spot {
-        public emptySpot(int x, int y, String originalPlacement, String color) {
-            super(x, y, originalPlacement);
-            this.color = color;
-            this.piece = null;
-        }
-    }
 
-    // Subclass of Spot for Occupied Spot Initialization
-    class occupiedSpot extends Spot {
-        public occupiedSpot(int x, int y, Piece piece, String originalPlacement, String color) {
-            super(x, y, originalPlacement);
-            this.color = color;
-            this.piece = piece;
-        }
+    /**
+     * Gets the x-coordinate for the invoking Spot object
+     * @return the x-coordinate
+     */
+    public int getX () {
+        return x;
     }
-*/
+    
+    /**
+     * Gets the y-coordinate for the invoking Spot object
+     * @return the y-coordinate
+     */
+    public int getY () {
+        return y;
+    }
+    
+    /**
+     * Gets the Piece type for the invoking Spot object
+     * @return a Piece object
+     */
+    public Piece getPiece () {
+        return piece;
+    }
+}

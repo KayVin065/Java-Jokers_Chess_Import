@@ -136,8 +136,19 @@ public class Board {
         int toPosx = translateMove(input.charAt(4));
 
         Piece temp = board[fromPosx][fromPosy].piece;
+        if(temp.validMove(board, board[fromPosx][fromPosy], board[toPosx][toPosy])) {
+            
+        }
         board[fromPosx][fromPosy].piece = null;
         board[toPosx][toPosy].piece = temp;
         display();
+    }
+
+    /** Method to return spot at given coordinates
+    * @param x x-coordinate of spot
+    * @param y y-coordinate of spot
+    */
+    public Spot getBox(int x, int y) {
+        return board[x][y];
     }
 }

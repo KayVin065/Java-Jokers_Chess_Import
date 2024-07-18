@@ -38,15 +38,13 @@ public class Chess {
      * Alternates turns, checks for check/checkmate, gets moves from player
      */
     public void play() {
-        int count = 0;
-        while(count < 2) {
+        // currently outputs an infinite loop !!!
+        while(!end()) {
             System.out.print(currentTurn + " player enter move: ");
             userInput = scnr.nextLine();
             board.movePiece(userInput);
-            currentTurn = setCurrentTurn(currentTurn);
-            count++;
+            currentTurn = setCurrentTurn(currentTurn); // toggles the turn
         }
-        //currentTurn = setCurrentTurn(currentTurn); // toggles the turn 
     }
 
     /**

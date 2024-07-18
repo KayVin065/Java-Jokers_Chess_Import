@@ -19,7 +19,7 @@ public class Chess {
     public void start() {
         white = new Player("white");
         black = new Player("black");
-        currentTurn = "white";
+        currentTurn = "black";
 
         board.display();
         System.out.println("White player moves first");

@@ -1,0 +1,11 @@
+// TO DO ITEMS FOR PROJECT:
+
+// edit the movePiece() method in Board.java so that it outputs the updated board only if validMove() is checked and returns true for
+// the invoking Piece. outputs "Please enter valid move" if it returns false
+
+// maybe need to check if pieces are captured? this may already be happening in validMove() and I just 
+// didn't read through it in-depth. need to set Spot.piece = null if isCaptured == true
+
+// edit the end() method in Chess.java so that it actually works. right now the code runs as an infinite loop
+
+// other than that, I think the code works well and is awesome for our first phase of implementation! 

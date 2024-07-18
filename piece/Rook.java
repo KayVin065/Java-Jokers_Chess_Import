@@ -26,6 +26,6 @@ public class Rook extends Piece {
 
     @Override
     public String toString() {
-        return " " + firstChar + "R";
+        return firstChar + "R";
     }
 }

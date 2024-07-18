@@ -22,6 +22,6 @@ public class King extends Piece {
 
     @Override
     public String toString() {
-        return " " + firstChar + "K";
+        return firstChar + "K";
     }
 }

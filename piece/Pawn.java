@@ -21,7 +21,7 @@ public class Pawn extends Piece {
      * Validates whether the move inputted by the user is a valid move for this piece
      */
     @Override
-    public boolean validMove(Board board, Spot start, Spot end) {
+    public boolean validMove(Spot[][] board, Spot start, Spot end) {
         if (end.getPiece() != null && end.getPiece().getColor().equals(this.getColor())) {
             return false;
         }
@@ -41,7 +41,7 @@ public class Pawn extends Piece {
         if (xEnd == x && yEnd == y + 2 * direction && end.getPiece() == null) {
             // Ensure both squares are empty
             if ((y == 6 && this.getColor().equals("white")) || (y == 1 && this.getColor().equals("black"))) {
-                if (board.getBox(x, y + direction).getPiece() == null) {
+                if (board[end.getX()][end.getY() + direction].getPiece() == null) {
                     return true;
                 }
             }

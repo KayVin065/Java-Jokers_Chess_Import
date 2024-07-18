@@ -21,7 +21,7 @@ public class Rook extends Piece {
      * Validates whether the move inputted by the user is a valid move for this piece
      */
     @Override
-    public boolean validMove(Board board, Spot start, Spot end) {
+    public boolean validMove(Spot[][] board, Spot start, Spot end) {
         if (end.getPiece() != null && end.getPiece().getColor().equals(this.getColor())) {
             return false;
         }
@@ -38,7 +38,7 @@ public class Rook extends Piece {
             int min = Math.min(y, end.getY());
             int max = Math.max(y, end.getY());
             for (int i = min + 1; i < max; i++) {
-                if (board.getBox(x, i).getPiece() != null) {
+                if (board[end.getX()][i].getPiece() != null) {
                     return false;
                 }
             }
@@ -47,7 +47,7 @@ public class Rook extends Piece {
             int min = Math.min(x, end.getX());
             int max = Math.max(x, end.getX());
             for (int i = min + 1; i < max; i++) {
-                if (board.getBox(i, y).getPiece() != null) {
+                if (board[end.getX()][i].getPiece() != null) {
                     return false;
                 }
             }

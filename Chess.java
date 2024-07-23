@@ -17,6 +17,8 @@ public class Chess {
      * Initializes the game attributes
      */
     public void start() {
+        DisplayBoard gameBoard = new DisplayBoard();
+        gameBoard.createChessBoard();
         white = new Player("white");
         black = new Player("black");
         currentTurn = "black";

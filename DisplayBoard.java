@@ -11,10 +11,10 @@ public class DisplayBoard {
     //defines the dimensions of the chess board
     private static final int Rows = 8;
     private static final int Columns = 8;
-    private final JPanel[][] chessBoardSquares = new JPanel[Rows][Columns];
-    //Variables to monitor the square and piece selected
+    private final JPanel[][] chessBoardpieces = new JPanel[Rows][Columns];
+    //Variables to monitor the piece and piece selected
     private JLabel selectedPieceLabel = null;
-    private JPanel selectedSquare = null;
+    private JPanel selectedpiece = null;
     //unicode for chess pieces
     private static final String[] UNICODE_PIECES = 
     {
@@ -24,29 +24,29 @@ public class DisplayBoard {
      
     public void createChessBoard() 
     {
-        //creates the general board
+        //creates the empty board
         JFrame frame = new JFrame("Chess Board");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new GridLayout(Rows, Columns));
         frame.setSize(600, 600);
 
-        //create each square
+        //create each piece
         for (int i = 0; i < Rows; i++) {
             for (int j = 0; j < Columns; j++) {
-                //creates jPanel for each square initialized
+                //creates jPanel for each tile initialized
                 JPanel panel = new JPanel(new BorderLayout());
                 
-                //colors each square
+                //colors each tile
                 panel.setBackground((i + j) % 2 == 0 ? Color.darkGray : Color.WHITE);
                 panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 //Creates another JLabel on top that displays chess piece
                 //idk how lines 41-43 work but i think they make it bigger and centered
                 //(i just added it from the example)
-                JLabel square = new JLabel(getPieceUnicode(i, j));
-                square.setFont(new Font("Serif", Font.BOLD, 32));
-                square.setHorizontalAlignment(JLabel.CENTER);
-                square.setVerticalAlignment(JLabel.CENTER);
-                panel.add(square, BorderLayout.CENTER);
+                JLabel piece = new JLabel(getPieceUnicode(i, j));
+                piece.setFont(new Font("Serif", Font.BOLD, 32));
+                piece.setHorizontalAlignment(JLabel.CENTER);
+                piece.setVerticalAlignment(JLabel.CENTER);
+                panel.add(piece, BorderLayout.CENTER);
 
                 //copied from example to handle mouse clicks
                 panel.addMouseListener(new MouseAdapter() {
@@ -57,7 +57,7 @@ public class DisplayBoard {
                     }
                 });
 
-                chessBoardSquares[i][j] = panel;
+                chessBoardpieces[i][j] = panel;
                 frame.add(panel);
             }
         }
@@ -79,28 +79,28 @@ public class DisplayBoard {
             if (clickedLabel != null && !clickedLabel.getText().isEmpty()) 
             {
                 selectedPieceLabel = clickedLabel;
-                selectedSquare = clickedPanel;
-                selectedSquare.setBorder(BorderFactory.createLineBorder(Color.RED));
+                selectedpiece = clickedPanel;
+                selectedpiece.setBorder(BorderFactory.createLineBorder(Color.RED));
             }
         }   
         else 
         {
             // Move the piece if its different from beginnning location
-            if (clickedPanel != selectedSquare) 
+            if (clickedPanel != selectedpiece) 
             {
                 JLabel targetLabel = getLabelFromPanel(clickedPanel);
                 //TODO: add error handling here for when pieces conflict!!!
                 if (targetLabel != null) 
                 {
-                    // Move the piece to the target square
+                    // Move the piece to the target piece
                     targetLabel.setText(selectedPieceLabel.getText());
                     selectedPieceLabel.setText(""); // clears initial spot
                 }
                 //else{should display error message of some sort}
                 //this is to create a sense of movement (if that makes sense im tired)
-                selectedSquare.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                selectedpiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 selectedPieceLabel = null;
-                selectedSquare = null;
+                selectedpiece = null;
             }
         }
     }

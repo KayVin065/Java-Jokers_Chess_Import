@@ -8,8 +8,9 @@ public class Chess {
     Scanner scnr = new Scanner(System.in);
     String userInput;
     
-    public void main(String[] args) {
-        start();  
+    public static void main(String[] args) {
+        Chess chessGame = new Chess();
+        chessGame.start();  
 
     }
 

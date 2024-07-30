@@ -1,3 +1,4 @@
+
 /**
  * Displays the actual componets of the chess board
  * NOTE:does not communicate with rest of project yet
@@ -9,12 +10,13 @@ import javax.swing.*;
 
 public class DisplayBoard {
     //defines the dimensions of the chess board
-    private static final int Rows = 8;
-    private static final int Columns = 8;
-    private final JPanel[][] chessBoardpieces = new JPanel[Rows][Columns];
+    private  String userInput = null;
+    private final int Rows = 8;
+    private final int Columns = 8;
+    private final JPanel[][] chessBoardpieces = new BoardPanel[Rows][Columns];
     //Variables to monitor the piece and piece selected
     private JLabel selectedPieceLabel = null;
-    private JPanel selectedpiece = null;
+    private BoardPanel selectedpiece = null;
     //unicode for chess pieces
     private static final String[] UNICODE_PIECES = 
     {
@@ -34,7 +36,7 @@ public class DisplayBoard {
         for (int i = 0; i < Rows; i++) {
             for (int j = 0; j < Columns; j++) {
                 //creates jPanel for each tile initialized
-                JPanel panel = new JPanel(new BorderLayout());
+                BoardPanel panel = new BoardPanel(i, j);
                 
                 //colors each tile
                 panel.setBackground((i + j) % 2 == 0 ? Color.darkGray : Color.WHITE);
@@ -69,10 +71,10 @@ public class DisplayBoard {
      * if mouse selects a new location
      * @param clickedPanel
      */
-    private void handleMouseClick(JPanel clickedPanel) 
+    private void handleMouseClick(BoardPanel clickedPanel) 
     {
         JLabel clickedLabel = getLabelFromPanel(clickedPanel);
-
+        
         if (selectedPieceLabel == null) //no piece selected
         {
             //if a piece is selected without an end location
@@ -86,10 +88,12 @@ public class DisplayBoard {
         else 
         {
             // Move the piece if its different from beginnning location
+            
             if (clickedPanel != selectedpiece) 
             {
+
                 JLabel targetLabel = getLabelFromPanel(clickedPanel);
-                //TODO: add error handling here for when pieces conflict!!!
+                setMove(selectedpiece, clickedPanel);
                 if (targetLabel != null) 
                 {
                     // Move the piece to the target piece
@@ -104,6 +108,24 @@ public class DisplayBoard {
             }
         }
     }
+    public void setMove(String input)
+    {
+        userInput = input;
+    }
+    public void setMove(BoardPanel selectedpiece, BoardPanel clickedPanel)
+    {
+        userInput = String.valueOf(selectedpiece.getRow());
+        userInput += String.valueOf(selectedpiece.getColumn());
+        userInput += " ";
+        userInput += String.valueOf(clickedPanel.getRow());
+        userInput += String.valueOf(clickedPanel.getColumn());
+    }
+
+    public String getMove()
+    {
+        return userInput;
+    }
+    
 
     /**
      * returns label from JPanel
@@ -125,19 +147,21 @@ public class DisplayBoard {
         if (row == 0 || row == 7) {
             int offset = (row == 0) ? 0 : 6; // Determines white or black pieces
             switch (column) {
-                case 0:
-                case 7:
+                case 0, 7 -> {
                     return UNICODE_PIECES[2 + offset]; // Rook
-                case 1:
-                case 6:
+                }
+                case 1, 6 -> {
                     return UNICODE_PIECES[4 + offset]; // Knight
-                case 2:
-                case 5:
+                }
+                case 2, 5 -> {
                     return UNICODE_PIECES[3 + offset]; // Bishop
-                case 3:
+                }
+                case 3 -> {
                     return (row == 0) ? UNICODE_PIECES[1] : UNICODE_PIECES[7]; // Queen
-                case 4:
+                }
+                case 4 -> {
                     return (row == 0) ? UNICODE_PIECES[0] : UNICODE_PIECES[6]; // King
+                }
             }
         } else if (row == 1 || row == 6) {
             return (row == 1) ? UNICODE_PIECES[5] : UNICODE_PIECES[11]; // Pawns

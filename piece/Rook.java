@@ -38,7 +38,7 @@ public class Rook extends Piece {
             int min = Math.min(y, end.getY());
             int max = Math.max(y, end.getY());
             for (int i = min + 1; i < max; i++) {
-                if (board.getBox(x, i).getPiece() != null) {
+                if (board[end.getX()][i].getPiece() != null) {
                     return false;
                 }
             }
@@ -47,7 +47,7 @@ public class Rook extends Piece {
             int min = Math.min(x, end.getX());
             int max = Math.max(x, end.getX());
             for (int i = min + 1; i < max; i++) {
-                if (board.getBox(i, y).getPiece() != null) {
+                if (board[end.getX()][i].getPiece() != null) {
                     return false;
                 }
             }
@@ -55,7 +55,7 @@ public class Rook extends Piece {
 
         return true;
     }
-    //TODO: add rook method that swaper the king and rook location 
+
     /**
      * Overridden toString method to configure how a Rook is output to the screen
      */

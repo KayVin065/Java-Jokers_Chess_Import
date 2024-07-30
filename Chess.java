@@ -1,6 +1,7 @@
 
 
 import board.*;
+import piece.Piece;
 import piece.Player;
 import java.util.Scanner;
 import java.awt.*;
@@ -68,6 +69,10 @@ public class Chess {
                 System.out.println("\nERROR incorrect move");
                 play(currentTurn);
             }
+            else {
+
+            }
+            
             //board.movePiece(userInput, currentTurn);
             if(currentTurn.getColor() == "black")
             {
@@ -235,4 +240,5 @@ public class Chess {
             }
             return ""; // Empty space for non-piece areas
         }
+
     }  

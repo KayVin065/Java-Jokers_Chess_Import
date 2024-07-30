@@ -146,6 +146,8 @@ public class Board {
         }
     }
 
+    /*
+
     public boolean isKingChecked(int fromX, int fromY, int toX, int toY) {
         // is there a piece there? NO? return false
         if(board[toX][toY].piece == null) {
@@ -162,4 +164,5 @@ public class Board {
 
         return true;
     }
+    */
 }

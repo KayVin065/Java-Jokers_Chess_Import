@@ -21,23 +21,25 @@ public class Bishop extends Piece {
      * Validates whether the move inputted by the user is a valid move for this piece
      */
     @Override
-    public boolean validMove(Spot[][] board, Spot start, Spot end, Player player) {
-        if (end.getPiece() != null && end.getPiece().getColor().equals(this.getColor())) {
+    public boolean validMove(Spot[][] board, Spot start, Spot end, Player currentTurn) {
+        if (end.getPiece() != null && !(start.getPiece().getColor().equals(currentTurn.getColor()))) { 
             return false;
         }
         
         int x = Math.abs(start.getX() - end.getX());
         int y = Math.abs(start.getY() - end.getY());
 
+        
         if (x != y) {
             return false;
         }
+        
 
         int xDirection = start.getX() < end.getX() ? 1 : -1;
         int yDirection = start.getY() < end.getY() ? 1 : -1;
 
-        int xCurrent = start.getX() + xDirection;
-        int yCurrent = start.getY() + yDirection;
+        int xCurrent = start.getX() * xDirection;
+        int yCurrent = start.getY() * yDirection;
 
         //this will check if there's any pieces in the way if there is, then the move isn't valid
         while (xCurrent != end.getX() && yCurrent != end.getY()) {
@@ -58,6 +60,4 @@ public class Bishop extends Piece {
     public String toString() {
         return " " + firstChar + "B";
     }
-
-    
 }

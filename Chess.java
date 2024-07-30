@@ -244,4 +244,4 @@ public class Chess {
             }
             return ""; // Empty space for non-piece areas
         }
-    } 
+    }  

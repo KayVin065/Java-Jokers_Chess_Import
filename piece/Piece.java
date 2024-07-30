@@ -31,5 +31,5 @@ public abstract class Piece {
      * @param end the "to" Spot
      * @return true if the move is valid, false if the move is not
      */
-    public abstract boolean validMove(Spot[][] board, Spot start, Spot end);
+    public abstract boolean validMove(Spot[][] board, Spot start, Spot end, Player currentTurn);
 }

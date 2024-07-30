@@ -1,10 +1,10 @@
 import board.*;
+import piece.Player;
 import java.util.Scanner;
 public class Chess {
     protected Board board = new Board();
     Player white;
     Player black;
-    String currentTurn;
     Scanner scnr = new Scanner(System.in);
     String userInput;
     
@@ -19,17 +19,9 @@ public class Chess {
     public void start() {
         white = new Player("white");
         black = new Player("black");
-        currentTurn = "black";
 
         board.display();
-        System.out.println("White player moves first");
-        System.out.print("Enter move formatted as \"[FROM] [TO]\" EX: \"E2 E4\": ");
-        userInput = scnr.nextLine();
-
-        System.out.println();
-        board.movePiece(userInput);
-
-        play();
+        play(white);
 
     }
 
@@ -37,14 +29,21 @@ public class Chess {
      * The main loop that executes for playing the game
      * Alternates turns, checks for check/checkmate, gets moves from player
      */
-    public void play() {
+    public void play(Player currentTurn) {
         // currently outputs an infinite loop !!!
-        while(!end()) {
-            System.out.print(currentTurn + " player enter move: ");
+            System.out.println("Enter move formatted as \"[FROM] [TO]\" EX: \"E2 E4\": ");
+            System.out.print(currentTurn.getColor() + " player enter move: ");
             userInput = scnr.nextLine();
-            board.movePiece(userInput);
-            currentTurn = setCurrentTurn(currentTurn); // toggles the turn
-        }
+            board.movePiece(userInput, currentTurn);
+            if(currentTurn.getColor() == "black")
+            {
+                play(white);
+            }
+            else if(currentTurn.getColor() == "white")
+            {
+                play(black);
+            }
+
     }
 
     /**
@@ -57,19 +56,4 @@ public class Chess {
     public boolean end() {
         return false;
     }
-
-
-    /**
-     * Toggles the current Player to determine whose turn it is
-     * @param currentTurn String of the current player whose turn it is
-     * @return The opposite color of the currentTurn color
-     */
-    public String setCurrentTurn(String currentTurn) {
-        if(currentTurn.equals("white")) {
-            return "black";
-        } else {
-            return "white";
-        }
-    }
-
 }  

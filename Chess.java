@@ -29,7 +29,7 @@ public class Chess {
         userInput = scnr.nextLine();
 
         System.out.println();
-        board.movePiece(userInput);
+        board.movePiece(userInput); 
 
         play();
 

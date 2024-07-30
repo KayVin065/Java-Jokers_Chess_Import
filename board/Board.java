@@ -136,12 +136,19 @@ public class Board {
         int toPosx = translateMove(input.charAt(4));
 
         Piece temp = board[fromPosx][fromPosy].piece;
-        if(temp.validMove(board, board[fromPosx][fromPosy], board[toPosx][toPosy])) {
+        if(temp.validMove(board, board[fromPosx][fromPosy], board[toPosx][toPosy])) 
+        {
             
-        }
+        
         board[fromPosx][fromPosy].piece = null;
         board[toPosx][toPosy].piece = temp;
         display();
+        }
+        else
+        {
+            System.out.println("Error piece entered would take your own piece!");
+            display();
+        }
     }
 
     /** Method to return spot at given coordinates

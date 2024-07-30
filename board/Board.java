@@ -144,12 +144,6 @@ public class Board {
             return false;
         }
 
-        if(!temp.getColor().equals(player.getColor()))
-        {
-            System.out.println("Error! you cannot move your opponets piece ):< ");
-            return false;
-        }
-
         if(temp.validMove(board, board[fromPosx][fromPosy], board[toPosx][toPosy], player)) {
             movePiece(fromPosx, fromPosy, toPosx, toPosy, player);
             return true;

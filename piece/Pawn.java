@@ -24,6 +24,7 @@ public class Pawn extends Piece {
     public boolean validMove(Spot[][] board, Spot start, Spot end, Player currentTurn) {
         if (end.getPiece() != null && !(start.getPiece().getColor().equals(currentTurn.getColor()))) { 
             return false;
+            
         }
 
         int x = start.getX();

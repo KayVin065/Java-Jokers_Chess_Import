@@ -37,6 +37,11 @@ public class Chess {
             System.out.println("Enter move formatted as \"[FROM] [TO]\" EX: \"E2 E4\": ");
             System.out.print(currentTurn.getColor() + " player enter move: ");
             userInput = scnr.nextLine();
+            if(board.canMove(userInput, currentTurn) == false)
+            {
+                System.out.println("\nERROR incorrect move");
+                play(currentTurn);
+            }
             board.movePiece(userInput, currentTurn);
             if(currentTurn.getColor() == "black")
             {

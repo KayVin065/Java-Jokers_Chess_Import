@@ -131,14 +131,14 @@ public class Board {
     }
 
     public boolean canMove(String input, Player player) {
-        int fromPosx = translateMove(input.charAt(0));
-        int fromPosy = translateMove(input.charAt(1));
-        int toPosx = translateMove(input.charAt(3));
-        int toPosy = translateMove(input.charAt(4));
+        int fromPosy = translateMove(input.charAt(0));
+        int fromPosx = translateMove(input.charAt(1));
+        int toPosy = translateMove(input.charAt(3));
+        int toPosx = translateMove(input.charAt(4));
 
         Piece temp = board[fromPosx][fromPosy].getPiece();
 
-        if(temp.validMove(board, board[toPosx][fromPosy], board[toPosx][toPosy], player)) {
+        if(temp.validMove(board, board[fromPosx][fromPosy], board[toPosx][toPosy], player)) {
             movePiece(fromPosx, fromPosy, toPosx, toPosy, player);
             return true;
         } else {

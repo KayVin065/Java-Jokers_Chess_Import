@@ -21,8 +21,8 @@ public class Pawn extends Piece {
      * Validates whether the move inputted by the user is a valid move for this piece
      */
     @Override
-    public boolean validMove(Spot[][] board, Spot start, Spot end) {
-        if (end.getPiece() != null && end.getPiece().getColor().equals(this.getColor())) {
+    public boolean validMove(Spot[][] board, Spot start, Spot end, Player currentTurn) {
+        if (end.getPiece() != null && !(start.getPiece().getColor().equals(currentTurn.getColor()))) { 
             return false;
         }
 
@@ -30,18 +30,18 @@ public class Pawn extends Piece {
         int y = start.getY();
         int xEnd = end.getX();
         int yEnd = end.getY();
-        int direction = this.getColor().equals("white") ? -1 : 1; // White pawns move up (-1), black pawns move down (+1)
+        int direction = currentTurn.getColor().equals("white") ? -1 : 1; // White pawns move up (-1), black pawns move down (+1)
 
         // Move forward one square
-        if (xEnd == x && yEnd == y + direction && end.getPiece() == null) {
+        if (xEnd == (x + direction) && yEnd == y && end.getPiece() == null) {
             return true;
         }
 
         // Initial two-square move
-        if (xEnd == x && yEnd == y + 2 * direction && end.getPiece() == null) {
+        if (xEnd == x + (2 * direction) && yEnd == y && end.getPiece() == null) {
             // Ensure both squares are empty
-            if ((y == 6 && this.getColor().equals("white")) || (y == 1 && this.getColor().equals("black"))) {
-                if (board[end.getX()][end.getY() + direction].getPiece() == null) {
+            if ((x == 6 && currentTurn.getColor().equals("white")) || (x == 1 && currentTurn.getColor().equals("black"))) {
+                if (board[end.getX()][end.getY()].getPiece() == null) {
                     return true;
                 }
             }

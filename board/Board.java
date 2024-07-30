@@ -6,10 +6,6 @@ import piece.*;
 
 public class Board {
     public Spot[][] board = new Spot[8][8];
-    protected char newTempPositionX;
-    protected char newTempPositionY;
-    protected char oldTempPositionX;
-    protected char oldTempPositionY;
 
     /**
      * Initializes an 8x8 board with pieces in original positions
@@ -122,36 +118,32 @@ public class Board {
      * Takes in two Strings that represent the user input coordinates
      * @param input String representing the "to" and "from" coordinates as one line
      */
-    public void movePiece(String input)
+    public void movePiece(String input, Player player)
     {
         int fromPosy = translateMove(input.charAt(0));
         int fromPosx = translateMove(input.charAt(1));
         int toPosy = translateMove(input.charAt(3));
         int toPosx = translateMove(input.charAt(4));
 
-        Piece temp = board[fromPosx][fromPosy].piece;
-        
-        /*board[fromPosx][fromPosy].piece = null;
-        board[toPosx][toPosy].piece = temp;
-        display();*/
+        Piece temp = board[fromPosx][fromPosy].getPiece();
 
-        
-        if(temp.validMove(board, board[fromPosx][fromPosy], board[toPosx][toPosy])) {
+        if(canMove(fromPosx, fromPosy, toPosx, toPosy, player)) {
             board[fromPosx][fromPosy].piece = null;
             board[toPosx][toPosy].piece = temp;
+            System.out.println();
             display();
         } else {
-            System.out.println("Not a valid move");
+            System.out.println("Not a valid move. Please enter valid move:");
         }
         
     }
 
-    /** Method to return spot at given coordinates
-    * @param x x-coordinate of spot
-    * @param y y-coordinate of spot
-    */
-    /*
-    public Spot getBox(int x, int y) {
-        return board[x][y];
-    } */
+    public boolean canMove(int fromX, int fromY, int toX, int toY, Player player) {
+        Piece temp = board[fromX][fromY].getPiece();
+        if(temp.validMove(board, board[fromX][fromY], board[toX][toY], player)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

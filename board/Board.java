@@ -115,8 +115,11 @@ public class Board {
     }
 
     /**
-     * Takes in two Strings that represent the user input coordinates
-     * @param input String representing the "to" and "from" coordinates as one line
+     * Executes the move on the board
+     * @param fromX int representing the "from" x-coordinate
+     * @param fromY int representing the "from" y-coordinate
+     * @param toX int representing the "to" x-coordinate
+     * @param toY int representing the "to" y-coordinate
      */
     public void movePiece(int fromX, int fromY, int toX, int toY, Player player)
     {
@@ -130,6 +133,13 @@ public class Board {
         
     }
 
+    /**
+     * Takes in user input and determines if that move is valid
+     * If the move is valid, call movePiece() to move the piece on the board
+     * @param input String representing the "to" and "from" coordinates as one line
+     * @param player the Player object of the current player
+     * @return true if the move is valid, false if the move is not valid
+     */
     public boolean canMove(String input, Player player) {
         int fromPosy = translateMove(input.charAt(0));
         int fromPosx = translateMove(input.charAt(1));

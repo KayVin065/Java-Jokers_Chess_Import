@@ -1,4 +1,6 @@
 import board.*;
+import piece.Player;
+
 import java.util.Scanner;
 public class Chess {
     protected Board board = new Board();
@@ -16,7 +18,8 @@ public class Chess {
     /**
      * Initializes the game attributes
      */
-    public void start() {
+    public void start() 
+    {
         DisplayBoard gameBoard = new DisplayBoard();
         gameBoard.createChessBoard();
         white = new Player("white");
@@ -24,14 +27,14 @@ public class Chess {
         currentTurn = "black";
 
         board.display();
-        System.out.println("White player moves first");
-        System.out.print("Enter move formatted as \"[FROM] [TO]\" EX: \"E2 E4\": ");
-        userInput = scnr.nextLine();
+        //System.out.println("White player moves first");
+        //System.out.print("Enter move formatted as \"[FROM] [TO]\" EX: \"E2 E4\": ");
+        //userInput = scnr.nextLine();
 
-        System.out.println();
-        board.movePiece(userInput); 
+        //System.out.println();
+        //board.movePiece(userInput); 
 
-        play();
+        play(white);
 
     }
 
@@ -39,14 +42,22 @@ public class Chess {
      * The main loop that executes for playing the game
      * Alternates turns, checks for check/checkmate, gets moves from player
      */
-    public void play() {
+    
+     public void play(Player currentTurn) {
         // currently outputs an infinite loop !!!
-        while(!end()) {
-            System.out.print(currentTurn + " player enter move: ");
+            System.out.println("Enter move formatted as "[FROM] [TO]" EX: "E2 E4": ");
+            System.out.print(currentTurn.getColor() + " player enter move: ");
             userInput = scnr.nextLine();
             board.movePiece(userInput);
-            currentTurn = setCurrentTurn(currentTurn); // toggles the turn
-        }
+            if(currentTurn.getColor() == "black")
+            {
+                play(white);
+            }
+            else if(currentTurn.getColor() == "white")
+            {
+                play(black);
+            }
+
     }
 
     /**

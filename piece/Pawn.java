@@ -4,7 +4,6 @@
  */
 package piece;
 import board.*;
-
 public class Pawn extends Piece {
     private char firstChar;
 
@@ -19,17 +18,21 @@ public class Pawn extends Piece {
 
     /**
      * Validates whether the move inputted by the user is a valid move for this piece
+     * @param <Player>
      */
     @Override
-    public boolean validMove(Spot[][] board, Spot start, Spot end) {
-        if (end.getPiece() != null && end.getPiece().getColor().equals(this.getColor())) {
+    public boolean validMove(Spot[][] board, Spot start, Spot end, Player currentTurn) {
+        if (end.getPiece() != null && end.getPiece().getColor().equals(currentTurn.getColor())) {
+            System.out.println("ERROR: cannot move piece thats not yours!!!");
+            Chess.play(currentTurn);
+
             return false;
         }
 
-        int x = start.getX();
-        int y = start.getY();
-        int xEnd = end.getX();
-        int yEnd = end.getY();
+        int y = start.getX();
+        int x = start.getY();
+        int yEnd = end.getX();
+        int xEnd = end.getY();
         int direction = this.getColor().equals("white") ? -1 : 1; // White pawns move up (-1), black pawns move down (+1)
 
         // Move forward one square

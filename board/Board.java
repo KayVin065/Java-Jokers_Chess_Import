@@ -19,9 +19,9 @@ public class Board {
         for(int i = 0; i < 8; i++) {
             for(int j = 0; j < 8; j++) {
                 if(spotNum % 2 == 0) {
-                    board[i][j] = new Spot(i, j, "##", null);
+                    board[i][j] = new Spot(i, j, " ##", null);
                 } else {
-                    board[i][j] = new Spot(i, j, "    ", null);
+                    board[i][j] = new Spot(i, j, "   ", null);
                 }
                 spotNum++;
             }
@@ -36,24 +36,18 @@ public class Board {
      */
     public void display() {
         int columnNum = 8;
-        int col = 0;
         System.out.println("  A  B  C  D  E  F  G  H ");
         for(int i = 0; i < 8; i++) {
-            if(columnNum % 2 == 0 && board[i][col].piece == null) {
-                System.out.print(columnNum + " ");
-            } else {
-                System.out.print(columnNum);
-            }
-
+            System.out.print(columnNum);
+            
             for(int j = 0; j < 8; j++) {
                 if(board[i][j].piece != null) {
-                    System.out.print(" " + board[i][j].piece.toString());
+                    System.out.print(board[i][j].piece.toString());
                 } else {
                     System.out.print(board[i][j].originalPlacement);
                 }
             }
             columnNum--;
-            col++;
             System.out.println();
         }
         System.out.println();
@@ -136,6 +130,7 @@ public class Board {
         int toPosx = translateMove(input.charAt(4));
 
         Piece temp = board[fromPosx][fromPosy].piece;
+<<<<<<< HEAD
         if(temp.validMove(board, board[fromPosx][fromPosy], board[toPosx][toPosy])) 
         {
             
@@ -149,6 +144,22 @@ public class Board {
             System.out.println("Error piece entered would take your own piece!");
             display();
         }
+=======
+        
+        /*board[fromPosx][fromPosy].piece = null;
+        board[toPosx][toPosy].piece = temp;
+        display();*/
+
+        
+        if(temp.validMove(board, board[fromPosx][fromPosy], board[toPosx][toPosy])) {
+            board[fromPosx][fromPosy].piece = null;
+            board[toPosx][toPosy].piece = temp;
+            display();
+        } else {
+            System.out.println("Not a valid move");
+        }
+        
+>>>>>>> a9c3f45e0b1d340227346480c33940d645816ec2
     }
 
     /** Method to return spot at given coordinates

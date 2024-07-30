@@ -56,6 +56,6 @@ public class Bishop extends Piece {
      */
     @Override
     public String toString() {
-        return firstChar + "B";
+        return " " + firstChar + "B";
     }
 }

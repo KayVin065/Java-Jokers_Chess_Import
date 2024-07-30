@@ -1,3 +1,4 @@
+
 /**
  * Represents a King piece in a chess game
  * Subclass of the Piece class
@@ -21,8 +22,8 @@ public class King extends Piece {
      * Validates whether the move inputted by the user is valid for this piece
      */
     @Override
-    public boolean validMove(Spot[][] board, Spot start, Spot end) {
-        if (end.getPiece() != null && end.getPiece().getColor().equals(this.getColor())) {
+    public boolean validMove(Spot[][] board, Spot start, Spot end, Player currentTurn) {
+        if (end.getPiece() != null && !(start.getPiece().getColor().equals(currentTurn.getColor()))) { 
             return false;
         }
 

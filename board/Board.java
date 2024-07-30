@@ -6,10 +6,6 @@ import piece.*;
 
 public class Board {
     public Spot[][] board = new Spot[8][8];
-    protected char newTempPositionX;
-    protected char newTempPositionY;
-    protected char oldTempPositionX;
-    protected char oldTempPositionY;
 
     /**
      * Initializes an 8x8 board with pieces in original positions
@@ -122,38 +118,48 @@ public class Board {
      * Takes in two Strings that represent the user input coordinates
      * @param input String representing the "to" and "from" coordinates as one line
      */
-    public void movePiece(String input)
+    public void movePiece(int fromX, int fromY, int toX, int toY, Player player)
     {
+        Piece temp = board[fromX][fromY].getPiece();
+
+        board[fromX][fromY].piece = null;
+        board[toX][toY].piece = temp;
+
+        System.out.println();
+        display();
+        
+    }
+
+    public boolean canMove(String input, Player player) {
         int fromPosy = translateMove(input.charAt(0));
         int fromPosx = translateMove(input.charAt(1));
         int toPosy = translateMove(input.charAt(3));
         int toPosx = translateMove(input.charAt(4));
 
-        Piece temp = board[fromPosx][fromPosy].piece;
-        
-        /*board[fromPosx][fromPosy].piece = null;
-        board[toPosx][toPosy].piece = temp;
-        display();*/
+        Piece temp = board[fromPosx][fromPosy].getPiece();
 
-        
-        if(temp.validMove(board, board[fromPosx][fromPosy], board[toPosx][toPosy])) {
-            board[fromPosx][fromPosy].piece = null;
-            board[toPosx][toPosy].piece = temp;
-            display();
+        if(temp.validMove(board, board[fromPosx][fromPosy], board[toPosx][toPosy], player)) {
+            movePiece(fromPosx, fromPosy, toPosx, toPosy, player);
+            return true;
         } else {
-            System.out.println("Not a valid move");
+            return false;
         }
-        
     }
 
-    /** Method to return spot at given coordinates
-    * @param x x-coordinate of spot
-    * @param y y-coordinate of spot
-    */
-    /*
-    public Spot getBox(int x, int y) {
-        return board[x][y];
-    } */
+    public boolean isKingChecked(int fromX, int fromY, int toX, int toY) {
+        // is there a piece there? NO? return false
+        if(board[toX][toY].piece == null) {
+            return false;
+        }
+        // is the piece in the desired position on the same team? YES? return false
+        if(board[toX][toY].piece.getColor() == board[fromX][fromX].piece.getColor()) {
+            return false;
+        }
+        // i
+        if(board[fromX][fromY].piece instanceof King) {
+            return false;
+        }
 
-
+        return true;
+    }
 }

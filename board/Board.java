@@ -1,7 +1,9 @@
+
 /**
  * Represents a game board for a chess game
  */
 package board;
+import javax.swing.*;
 import piece.*;
 
 public class Board {
@@ -174,25 +176,33 @@ public class Board {
     }
 
     public boolean canMove(String input, Player player) {
-        int fromPosy = Character.getNumericValue(input.charAt(0));
+        int fromPosy = Character.getNumericValue(input.charAt(0));//a
         int fromPosx = Character.getNumericValue(input.charAt(1)); //translateMove(input.charAt(1));
         int toPosy = Character.getNumericValue(input.charAt(3));
         int toPosx = Character.getNumericValue(input.charAt(4));//translateMove(input.charAt(4));
 
         Piece temp = board[fromPosx][fromPosy].getPiece();
         Piece toTemp = board[toPosx][toPosy].getPiece();
+
+        if(temp.getColor() == null ? player.getColor() != null : !temp.getColor().equals(player.getColor()))
+        {
+            JOptionPane.showMessageDialog(null, "Error! you cannot your opponets piece!",
+             "Error", JOptionPane.ERROR_MESSAGE);
+             return false;
+        }
         if(toTemp != null && temp.getColor().equals(toTemp.getColor()))
         {
             System.out.println("Error! you cannot take your own piece!");
+            JOptionPane.showMessageDialog(null, "Error! you cannot take your own piece!", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-
         if(temp.validMove(board, board[fromPosx][fromPosy], board[toPosx][toPosy], player))
         {
             movePiece(fromPosx, fromPosy, toPosx, toPosy, player);
             return true;
         } else 
         {
+            JOptionPane.showMessageDialog(null, "Error! wrong piece movement!", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }

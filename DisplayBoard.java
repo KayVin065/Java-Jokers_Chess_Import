@@ -11,12 +11,15 @@ import javax.swing.*;
 public class DisplayBoard {
     //defines the dimensions of the chess board
     private  String userInput = null;
+    private String originalPieceText;
     private final int Rows = 8;
     private final int Columns = 8;
     private final JPanel[][] chessBoardpieces = new BoardPanel[Rows][Columns];
+    private boolean moveValid;
     //Variables to monitor the piece and piece selected
     private JLabel selectedPieceLabel = null;
     private BoardPanel selectedpiece = null;
+    private int originalRow, originalColumn;
     //unicode for chess pieces
     private static final String[] UNICODE_PIECES = 
     {
@@ -82,6 +85,9 @@ public class DisplayBoard {
             {
                 selectedPieceLabel = clickedLabel;
                 selectedpiece = clickedPanel;
+                originalRow = selectedpiece.getRow();
+                originalColumn = selectedpiece.getColumn();
+                originalPieceText = selectedPieceLabel.getText();
                 selectedpiece.setBorder(BorderFactory.createLineBorder(Color.RED));
             }
         }   
@@ -94,31 +100,56 @@ public class DisplayBoard {
 
                 JLabel targetLabel = getLabelFromPanel(clickedPanel);
                 setMove(selectedpiece, clickedPanel);
-                if (targetLabel != null) 
+                
+                if (targetLabel != null && getDisplayMoveValid() == true) 
                 {
                     // Move the piece to the target piece
                     targetLabel.setText(selectedPieceLabel.getText());
                     selectedPieceLabel.setText(""); // clears initial spot
+                    setDisplayMoveValid(false);
+                }
+                else 
+                {
+                    // Display error message if the move is invalid
+                    resetPiecePosition();
                 }
                 //else{should display error message of some sort}
                 //this is to create a sense of movement (if that makes sense im tired)
                 selectedpiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 selectedPieceLabel = null;
                 selectedpiece = null;
+                
             }
         }
     }
+
+    private void resetPiecePosition() {
+        JLabel originalLabel = getLabelFromPanel(chessBoardpieces[originalRow][originalColumn]);
+        selectedPieceLabel.setText("");
+        originalLabel.setText(originalPieceText);
+    }
+
     public void setMove(String input)
     {
         userInput = input;
     }
     public void setMove(BoardPanel selectedpiece, BoardPanel clickedPanel)
     {
-        userInput = String.valueOf(selectedpiece.getRow());
-        userInput += String.valueOf(selectedpiece.getColumn());
+        userInput = String.valueOf(selectedpiece.getColumn());
+        userInput += String.valueOf(selectedpiece.getRow());
         userInput += " ";
-        userInput += String.valueOf(clickedPanel.getRow());
         userInput += String.valueOf(clickedPanel.getColumn());
+        userInput += String.valueOf(clickedPanel.getRow());
+
+    }
+    public void setDisplayMoveValid(boolean statement)
+    {
+        moveValid = statement;
+    }
+
+    public boolean getDisplayMoveValid()
+    {
+        return moveValid;
     }
 
     public String getMove()
@@ -145,7 +176,7 @@ public class DisplayBoard {
      */
     private static String getPieceUnicode(int row, int column) {
         if (row == 0 || row == 7) {
-            int offset = (row == 0) ? 0 : 6; // Determines white or black pieces
+            int offset = (row == 7) ? 0 : 6; // Determines white or black pieces
             switch (column) {
                 case 0, 7 -> {
                     return UNICODE_PIECES[2 + offset]; // Rook
@@ -157,14 +188,14 @@ public class DisplayBoard {
                     return UNICODE_PIECES[3 + offset]; // Bishop
                 }
                 case 3 -> {
-                    return (row == 0) ? UNICODE_PIECES[1] : UNICODE_PIECES[7]; // Queen
+                    return (row == 7) ? UNICODE_PIECES[1] : UNICODE_PIECES[7]; // Queen
                 }
                 case 4 -> {
-                    return (row == 0) ? UNICODE_PIECES[0] : UNICODE_PIECES[6]; // King
+                    return (row == 7) ? UNICODE_PIECES[0] : UNICODE_PIECES[6]; // King
                 }
             }
         } else if (row == 1 || row == 6) {
-            return (row == 1) ? UNICODE_PIECES[5] : UNICODE_PIECES[11]; // Pawns
+            return (row == 6) ? UNICODE_PIECES[5] : UNICODE_PIECES[11]; // Pawns
         }
         return ""; // Empty space for non-piece areas
     }

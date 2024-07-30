@@ -19,7 +19,6 @@ public class Chess {
         gameBoard.createChessBoard();
         white = new Player("white");
         black = new Player("black");
-
         board.display();
         board.setCurrentPlayer(white);
         play(white);
@@ -45,23 +44,28 @@ public class Chess {
                     e.printStackTrace();
                 }
             }
+            //        JOptionPane.showMessageDialog(null, "message", "Error", JOptionPane.ERROR_MESSAGE);
 
             System.out.println(userInput);
             if(board.canMove(userInput, currentTurn) == false)
             {
                 System.out.println("\nERROR incorrect move");
                 gameBoard.setMove(null);
+                gameBoard.setDisplayMoveValid(false);
                 board.setCurrentPlayer(currentTurn);
+                play(currentTurn);
             }
             //board.movePiece(userInput, currentTurn);
             if("black".equals(currentTurn.getColor()))
             {
+                gameBoard.setDisplayMoveValid(true);
                 gameBoard.setMove(null);
                 board.setCurrentPlayer(white);
                 play(white);
             }
             else if("white".equals(currentTurn.getColor()))
             {
+                gameBoard.setDisplayMoveValid(true);
                 gameBoard.setMove(null);
                 board.setCurrentPlayer(black);
                 play(black);

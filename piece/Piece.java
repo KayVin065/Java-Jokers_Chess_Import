@@ -25,6 +25,7 @@ public abstract class Piece {
 
     /**
      * Implemented in each Piece subclass to check if a move is valid
+     * @param <Player>
      * @param board the board to be changed
      * @param start the "from" Spot 
      * @param end the "to" Spot

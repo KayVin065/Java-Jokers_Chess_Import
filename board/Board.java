@@ -1,11 +1,22 @@
+
 /**
  * Represents a game board for a chess game
  */
 package board;
+import javax.swing.*;
 import piece.*;
 
 public class Board {
     public Spot[][] board = new Spot[8][8];
+    private Player currentTurn = null;
+
+    public void setCurrentPlayer(Player currentTurn) {
+        this.currentTurn = currentTurn;
+    }
+
+    public Player getCurrentTurn() {
+        return currentTurn;
+    }
 
     /**
      * Initializes an 8x8 board with pieces in original positions
@@ -53,7 +64,7 @@ public class Board {
      * Method to create new Piece objects for the first and last 2 rows of the board.
      * Completely resets the placement of the pieces
      */
-    public void setOriginalPieces() {
+    public final void setOriginalPieces() {
         for(int i = 0; i < 8; i++) {
             board[1][i].piece = new Pawn("black");
             board[6][i].piece = new Pawn("white");
@@ -114,6 +125,38 @@ public class Board {
         }
     }
 
+    public static int translateDisplayMove(char x) {
+        switch (x)
+        {
+            
+            case '7' -> {
+                return 1;
+            }
+            case '6' -> {
+                return 2;
+            }
+            case '5' -> {
+                return 3;
+            }
+            case '4' -> {
+                return 4;
+            }
+            case '3' -> {
+                return 5;
+            }
+            case '2' -> {
+                return 6;
+            }
+            case '1' -> {
+                return 7;
+            }
+            case '0' -> {
+                return 8;
+            }
+            default -> throw new AssertionError();
+        }
+    }
+
     /**
      * Takes in two Strings that represent the user input coordinates
      * @param input String representing the "to" and "from" coordinates as one line
@@ -145,6 +188,7 @@ public class Board {
             return false;
         }
     }
+}
 
     /*
 
@@ -165,4 +209,4 @@ public class Board {
         return true;
     }
     */
-}
+

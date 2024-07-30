@@ -4,7 +4,6 @@
  */
 package piece;
 import board.*;
-
 public class Pawn extends Piece {
     private char firstChar;
 
@@ -19,11 +18,13 @@ public class Pawn extends Piece {
 
     /**
      * Validates whether the move inputted by the user is a valid move for this piece
+     * @param <Player>
      */
     @Override
     public boolean validMove(Spot[][] board, Spot start, Spot end, Player currentTurn) {
         if (end.getPiece() != null && !(start.getPiece().getColor().equals(currentTurn.getColor()))) { 
             return false;
+            
         }
 
         int x = start.getX();

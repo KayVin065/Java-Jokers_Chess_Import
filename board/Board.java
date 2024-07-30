@@ -115,23 +115,22 @@ public class Board {
     }
 
     /**
-     
-Takes in two Strings that represent the user input coordinates
-@param input String representing the "to" and "from" coordinates as one line*/
-public void movePiece(int fromX, int fromY, int toX, int toY, Player player)
-{
-    Piece temp = board[fromX][fromY].getPiece();
+     * Takes in two Strings that represent the user input coordinates
+     * @param input String representing the "to" and "from" coordinates as one line
+     */
+    public void movePiece(int fromX, int fromY, int toX, int toY, Player player)
+    {
+        Piece temp = board[fromX][fromY].getPiece();
 
         board[fromX][fromY].piece = null;
         board[toX][toY].piece = temp;
 
         System.out.println();
         display();
-
+        
     }
 
-    public boolean canMove(String input, Player player) 
-    {
+    public boolean canMove(String input, Player player) {
         int fromPosx = translateMove(input.charAt(0));
         int fromPosy = translateMove(input.charAt(1));
         int toPosx = translateMove(input.charAt(3));

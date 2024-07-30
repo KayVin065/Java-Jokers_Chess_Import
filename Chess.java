@@ -42,7 +42,7 @@ public class Chess {
                 System.out.println("\nERROR incorrect move");
                 play(currentTurn);
             }
-            board.movePiece(userInput, currentTurn);
+            //board.movePiece(userInput, currentTurn);
             if(currentTurn.getColor() == "black")
             {
                 play(white);

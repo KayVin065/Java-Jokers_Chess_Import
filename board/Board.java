@@ -118,32 +118,48 @@ public class Board {
      * Takes in two Strings that represent the user input coordinates
      * @param input String representing the "to" and "from" coordinates as one line
      */
-    public void movePiece(String input, Player player)
+    public void movePiece(int fromX, int fromY, int toX, int toY, Player player)
     {
-        int fromPosy = translateMove(input.charAt(0));
-        int fromPosx = translateMove(input.charAt(1));
-        int toPosy = translateMove(input.charAt(3));
-        int toPosx = translateMove(input.charAt(4));
+        Piece temp = board[fromX][fromY].getPiece();
 
-        Piece temp = board[fromPosx][fromPosy].getPiece();
+        board[fromX][fromY].piece = null;
+        board[toX][toY].piece = temp;
 
-        if(canMove(fromPosx, fromPosy, toPosx, toPosy, player)) {
-            board[fromPosx][fromPosy].piece = null;
-            board[toPosx][toPosy].piece = temp;
-            System.out.println();
-            display();
-        } else {
-            System.out.println("Not a valid move. Please enter valid move:");
-        }
+        System.out.println();
+        display();
         
     }
 
-    public boolean canMove(int fromX, int fromY, int toX, int toY, Player player) {
-        Piece temp = board[fromX][fromY].getPiece();
-        if(temp.validMove(board, board[fromX][fromY], board[toX][toY], player)) {
+    public boolean canMove(String input, Player player) {
+        int fromPosx = translateMove(input.charAt(0));
+        int fromPosy = translateMove(input.charAt(1));
+        int toPosx = translateMove(input.charAt(3));
+        int toPosy = translateMove(input.charAt(4));
+
+        Piece temp = board[fromPosx][fromPosy].getPiece();
+
+        if(temp.validMove(board, board[toPosx][fromPosy], board[toPosx][toPosy], player)) {
+            movePiece(fromPosx, fromPosy, toPosx, toPosy, player);
             return true;
         } else {
             return false;
         }
+    }
+
+    public boolean isKingChecked(int fromX, int fromY, int toX, int toY) {
+        // is there a piece there? NO? return false
+        if(board[toX][toY].piece == null) {
+            return false;
+        }
+        // is the piece in the desired position on the same team? YES? return false
+        if(board[toX][toY].piece.getColor() == board[fromX][fromX].piece.getColor()) {
+            return false;
+        }
+        // i
+        if(board[fromX][fromY].piece instanceof King) {
+            return false;
+        }
+
+        return true;
     }
 }

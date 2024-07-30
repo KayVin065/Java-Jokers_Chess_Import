@@ -30,7 +30,7 @@ public class DisplayBoard {
         frame.setLayout(new GridLayout(Rows, Columns));
         frame.setSize(600, 600);
 
-        //create each piece
+        //create each piece & colors the tile
         for (int i = 0; i < Rows; i++) {
             for (int j = 0; j < Columns; j++) {
                 //creates jPanel for each tile initialized

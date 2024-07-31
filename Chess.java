@@ -39,12 +39,15 @@ public class Chess {
             while (userInput == null) {
                 userInput = gameBoard.getMove(); 
                 try {
-                    Thread.sleep(1000); // Avoid busy-waiting
+                    Thread.sleep(300); // Avoid busy-waiting
                 } catch (InterruptedException e) 
                 {
-                   // e.printStackTrace();
+                   e.printStackTrace();
                 }
             }
+            
+                
+            
             if("forfeit".equals(userInput))
             {
                 if("white".equals(currentTurn.getColor()))
@@ -67,8 +70,13 @@ public class Chess {
                 board.setCurrentPlayer(currentTurn);
                 play(currentTurn);
             }
-            else
+            else if(board.isKingChecked(currentTurn) == true)
             {
+                JOptionPane.showMessageDialog(null, "NO YOUR KING IS IN CHECK!!!", "WARNING!", JOptionPane.PLAIN_MESSAGE);
+                play(currentTurn);
+            } 
+            else
+            {  
                 board.movePiece(userInput, currentTurn);
                 gameBoard.setMove(null);
                 gameBoard.setDisplayMoveValid(true);

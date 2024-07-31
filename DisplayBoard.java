@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
@@ -17,7 +16,7 @@ public class DisplayBoard {
     private JLabel selectedPieceLabel = null;
     private BoardPanel selectedPiece = null;
     private int originalRow, originalColumn;
-    private JFrame frame = new JFrame("Chess Board");
+    private final JFrame frame = new JFrame("Chess Board");
 
     // unicode for chess pieces
     private static final String[] UNICODE_PIECES = {
@@ -66,13 +65,8 @@ public class DisplayBoard {
 
         // Create the forfeit button and add it to the frame
         JButton forfeitButton = new JButton("Forfeit");
-        forfeitButton.addActionListener(new ActionListener() 
-        {
-            @Override
-            public void actionPerformed(ActionEvent e) 
-            {
-                handleForfeitButtonClick();
-            }
+        forfeitButton.addActionListener((ActionEvent e) -> {
+            handleForfeitButtonClick();
         });
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(forfeitButton);
@@ -85,9 +79,12 @@ public class DisplayBoard {
     /**
      * Handles the forfeit button click
      */
-    private void handleForfeitButtonClick() {
-        int response = JOptionPane.showConfirmDialog(frame, "Are you sure you want to forfeit the game?", "Forfeit Game", JOptionPane.YES_NO_OPTION);
-        if (response == JOptionPane.YES_OPTION) {
+    private void handleForfeitButtonClick() 
+    {
+        int response = JOptionPane.showConfirmDialog(frame, "Are you sure you want to forfeit the game?"
+        , "Forfeit Game", JOptionPane.YES_NO_OPTION);
+        if (response == JOptionPane.YES_OPTION) 
+        {
             userInput = "forfeit";
             frame.dispose();
         }
@@ -113,9 +110,22 @@ public class DisplayBoard {
             }
         } else {
             if (clickedPanel != selectedPiece) {
+
                 JLabel targetLabel = getLabelFromPanel(clickedPanel);
                 setMove(selectedPiece, clickedPanel);
-                boolean test = getDisplayMoveValid();
+                /* try 
+                {
+                    waitForMoveValidation(); // Handle the InterruptedException
+                } 
+                catch (InterruptedException e) 
+                {
+                    e.printStackTrace(); // Handle the exception as needed
+                    Thread.currentThread().interrupt(); // Restore the interrupted status
+    
+                    // exit the current operation
+                    return; 
+                }*/
+                
                 if (targetLabel != null || getDisplayMoveValid()) {
                     targetLabel.setText(selectedPieceLabel.getText());
                     selectedPieceLabel.setText(""); // Clears initial spot
@@ -154,8 +164,19 @@ public class DisplayBoard {
         userInput += String.valueOf(clickedPanel.getRow());
     }
 
-    public void setDisplayMoveValid(boolean statement) {
+    public void waitForMoveValidation() throws InterruptedException 
+    {
+        synchronized (this) 
+        {
+            while (!moveValid) 
+            {
+                wait(); // Wait until another thread notifies us
+            }
+        }
+    }
+    public synchronized  void setDisplayMoveValid(boolean statement) {
         moveValid = statement;
+        notify();
     }
 
     public boolean getDisplayMoveValid() {
@@ -209,7 +230,7 @@ public class DisplayBoard {
     }
 
     private class BoardPanel extends JPanel {
-        private int row, column;
+        private final int row, column;
 
         public BoardPanel(int row, int column) {
             this.row = row;

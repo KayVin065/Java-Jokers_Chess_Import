@@ -6,7 +6,7 @@ package piece;
 import board.*;
 
 public class Rook extends Piece {
-    private char firstChar;
+    private final char firstChar;
 
     /**
      * Initializes a Rook object with the desired color and position

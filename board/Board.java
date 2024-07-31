@@ -211,20 +211,31 @@ public class Board {
         }
     }
 
-    public boolean isKingChecked(int fromX, int fromY, int toX, int toY) {
-        // is there a piece there? NO? return false
-        if(board[toX][toY].piece == null) {
-            return false;
+    public boolean isKingChecked(Player currentTurn) 
+    {
+        int kingx = 0, kingy = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (!(board[i][j].piece instanceof King) && !board[i][j].piece.getColor().equals(currentTurn.getColor())) {
+                } else {
+                    Piece temp = board[i][j].getPiece();//king for our player
+                    kingx = i;
+                    kingx = j;
+                    break;
+                }
+            }
         }
-        // is the piece in the desired position on the same team? YES? return false
-        if(board[toX][toY].piece.getColor() == null ? board[fromX][fromX].piece.getColor() == null : board[toX][toY].piece.getColor().equals(board[fromX][fromX].piece.getColor())) {
-            return false;
+        for(int i = 0; i < 8;  i++)
+        {
+            for(int j = 0; j < 8; j++)
+            {
+                Piece piece = board[i][j].piece;
+                if(piece.validMove(board, board[i][j], board[kingx][kingy], currentTurn) == true)
+                {
+                    return true;
+                }
+            }
         }
-        // i
-        if(board[fromX][fromY].piece instanceof King) {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 }

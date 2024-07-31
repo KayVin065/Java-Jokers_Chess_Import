@@ -12,8 +12,8 @@ public class Queen extends Piece {
      * Initializes a Queen object with the desired color and position
      * @param color The color of the Queen ("white" or "black")
      */
-    public Queen(String color) {
-        super(color);
+    public Queen(String color, String unicode) {
+        super(color, unicode);
         firstChar = color.charAt(0);
     }
 

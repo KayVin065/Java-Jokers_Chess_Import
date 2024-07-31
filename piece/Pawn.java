@@ -11,8 +11,8 @@ public class Pawn extends Piece {
      * Initializes a Pawn object with the desired color and position
      * @param color The color of the Pawn ("white" or "black")
      */
-    public Pawn(String color) {
-        super(color);
+    public Pawn(String color, String unicode) {
+        super(color, unicode);
         firstChar = color.charAt(0);
     }
 

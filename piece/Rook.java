@@ -12,8 +12,9 @@ public class Rook extends Piece {
      * Initializes a Rook object with the desired color and position
      * @param color The color of the Rook ("white" or "black")
      */
-    public Rook(String color) {
-        super(color);
+    public Rook(String color, String unicode) {
+        
+        super(color, unicode);
         firstChar = color.charAt(0);
     }
 
@@ -38,7 +39,8 @@ public class Rook extends Piece {
             int min = Math.min(y, end.getY());
             int max = Math.max(y, end.getY());
             for (int i = min + 1; i < max; i++) {
-                if (board[end.getX()][i].getPiece() != null) {
+                if (board[end.getX()][i].getPiece() != null) 
+                {
                     return false;
                 }
             }

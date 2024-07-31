@@ -1,3 +1,4 @@
+package board;
 import java.awt.BorderLayout;
 import javax.swing.*;
 

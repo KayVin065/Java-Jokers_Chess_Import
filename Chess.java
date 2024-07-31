@@ -36,10 +36,15 @@ public class Chess {
             System.out.println("Enter move formatted as \"[FROM] [TO]\" EX: \"E2 E4\": ");
             System.out.println(currentTurn.getColor() + " player enter move: ");
             String userInput = gameBoard.getMove();
-            while (userInput == null) {
+            if(board.isKingChecked(currentTurn) == true)
+            {
+                JOptionPane.showMessageDialog(null, currentTurn.getColor() + ", YOUR KING IS IN CHECK!!!", "WARNING!", JOptionPane.PLAIN_MESSAGE);
+            }
+            while (userInput == null) 
+            {
                 userInput = gameBoard.getMove(); 
                 try {
-                    Thread.sleep(300); // Avoid busy-waiting
+                    Thread.sleep(100); // Avoid busy-waiting
                 } catch (InterruptedException e) 
                 {
                    e.printStackTrace();
@@ -70,11 +75,6 @@ public class Chess {
                 board.setCurrentPlayer(currentTurn);
                 play(currentTurn);
             }
-            else if(board.isKingChecked(currentTurn) == true)
-            {
-                JOptionPane.showMessageDialog(null, "NO YOUR KING IS IN CHECK!!!", "WARNING!", JOptionPane.PLAIN_MESSAGE);
-                play(currentTurn);
-            } 
             else
             {  
                 board.movePiece(userInput, currentTurn);
@@ -84,14 +84,14 @@ public class Chess {
             //board.movePiece(userInput, currentTurn);
             if("black".equals(currentTurn.getColor()))
             {
-                gameBoard.setDisplayMoveValid(true);
+                gameBoard.setDisplayMoveValid(false);
                 gameBoard.setMove(null);
                 board.setCurrentPlayer(white);
                 play(white);
             }
             else if("white".equals(currentTurn.getColor()))
             {
-                gameBoard.setDisplayMoveValid(true);
+                gameBoard.setDisplayMoveValid(false);
                 gameBoard.setMove(null);
                 board.setCurrentPlayer(black);
                 play(black);

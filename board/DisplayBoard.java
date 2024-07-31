@@ -1,9 +1,10 @@
+
+package board;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
-
 public class DisplayBoard {
     // defines the dimensions of the chess board
     private String userInput = null;
@@ -23,6 +24,21 @@ public class DisplayBoard {
         "\u2654","\u2655","\u2656","\u2657","\u2658","\u2659",
         "\u265A","\u265B","\u265C","\u265D","\u265E","\u265F"
     };
+    /*
+     * 
+     * \u2654 - White King
+        \u2655 - White Queen
+        \u2656 - White Rook
+        \u2657 - White Bishop
+        \u2658 - White Knight
+        \u2659 - White Pawn
+        \u265A - Black King
+        \u265B - Black Queen
+        \u265C - Black Rook
+        \u265D - Black Bishop
+        \u265E - Black Knight
+        \u265F - Black Pawn
+     */
 
     public void createChessBoard() {
         // creates the empty board
@@ -41,6 +57,9 @@ public class DisplayBoard {
                 panel.setBackground((i + j) % 2 == 0 ? Color.darkGray : Color.WHITE);
                 panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 // Creates another JLabel on top that displays chess piece
+
+
+
                 JLabel piece = new JLabel(getPieceUnicode(i, j));
                 piece.setFont(new Font("Serif", Font.BOLD, 32));
                 piece.setHorizontalAlignment(JLabel.CENTER);
@@ -113,7 +132,8 @@ public class DisplayBoard {
 
                 JLabel targetLabel = getLabelFromPanel(clickedPanel);
                 setMove(selectedPiece, clickedPanel);
-                /* try 
+                /* 
+                 try 
                 {
                     waitForMoveValidation(); // Handle the InterruptedException
                 } 
@@ -124,9 +144,9 @@ public class DisplayBoard {
     
                     // exit the current operation
                     return; 
-                }*/
-                
-                if (targetLabel != null || getDisplayMoveValid()) {
+                }
+                */
+                if (targetLabel != null ) {
                     targetLabel.setText(selectedPieceLabel.getText());
                     selectedPieceLabel.setText(""); // Clears initial spot
                     setDisplayMoveValid(false);

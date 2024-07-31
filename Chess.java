@@ -1,4 +1,5 @@
 import board.*;
+import javax.swing.JOptionPane;
 import piece.Player;
 
 public class Chess {
@@ -8,7 +9,7 @@ public class Chess {
     DisplayBoard gameBoard = new DisplayBoard();
 
     public void main(String[] args) {
-        start();  
+    start();  
     }
 /* */
     /**
@@ -41,11 +42,22 @@ public class Chess {
                     Thread.sleep(1000); // Avoid busy-waiting
                 } catch (InterruptedException e) 
                 {
-                    e.printStackTrace();
+                   // e.printStackTrace();
                 }
             }
+            if("forfeit".equals(userInput))
+            {
+                if("white".equals(currentTurn.getColor()))
+                {
+                    JOptionPane.showMessageDialog(null, "Black wins!", "Congratulation!", JOptionPane.PLAIN_MESSAGE);
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "White wins!", "Congratulation!", JOptionPane.PLAIN_MESSAGE);
+                }
+                end();
+            }
             //        JOptionPane.showMessageDialog(null, "message", "Error", JOptionPane.ERROR_MESSAGE);
-
             System.out.println(userInput);
             if(board.canMove(userInput, currentTurn) == false)
             {
@@ -54,6 +66,12 @@ public class Chess {
                 gameBoard.setDisplayMoveValid(false);
                 board.setCurrentPlayer(currentTurn);
                 play(currentTurn);
+            }
+            else
+            {
+                board.movePiece(userInput, currentTurn);
+                gameBoard.setMove(null);
+                gameBoard.setDisplayMoveValid(true);
             }
             //board.movePiece(userInput, currentTurn);
             if("black".equals(currentTurn.getColor()))
@@ -70,6 +88,10 @@ public class Chess {
                 board.setCurrentPlayer(black);
                 play(black);
             }
+            if (end()) {
+                System.out.println("Game Over.");
+                System.exit(0);
+            }
         }
 
     
@@ -84,6 +106,7 @@ public class Chess {
        
     public boolean end()
     {
+
         return false;
     }
 }  

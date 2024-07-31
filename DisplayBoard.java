@@ -1,60 +1,56 @@
-
-/**
- * Displays the actual componets of the chess board
- * NOTE:does not communicate with rest of project yet
- */
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 
 public class DisplayBoard {
-    //defines the dimensions of the chess board
-    private  String userInput = null;
+    // defines the dimensions of the chess board
+    private String userInput = null;
     private String originalPieceText;
     private final int Rows = 8;
     private final int Columns = 8;
-    private final JPanel[][] chessBoardpieces = new BoardPanel[Rows][Columns];
+    private final JPanel[][] chessBoardPieces = new BoardPanel[Rows][Columns];
     private boolean moveValid;
-    //Variables to monitor the piece and piece selected
+    // Variables to monitor the piece and piece selected
     private JLabel selectedPieceLabel = null;
-    private BoardPanel selectedpiece = null;
+    private BoardPanel selectedPiece = null;
     private int originalRow, originalColumn;
-    //unicode for chess pieces
-    private static final String[] UNICODE_PIECES = 
-    {
+    private JFrame frame = new JFrame("Chess Board");
+
+    // unicode for chess pieces
+    private static final String[] UNICODE_PIECES = {
         "\u2654","\u2655","\u2656","\u2657","\u2658","\u2659",
-        "\u265A","\u265B","\u265C","\u265D","\u265E","\u265F" 
+        "\u265A","\u265B","\u265C","\u265D","\u265E","\u265F"
     };
-     
-    public void createChessBoard() 
-    {
-        //creates the empty board
-        JFrame frame = new JFrame("Chess Board");
+
+    public void createChessBoard() {
+        // creates the empty board
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new GridLayout(Rows, Columns));
+        frame.setLayout(new BorderLayout());
         frame.setSize(600, 600);
 
-        //create each piece & colors the tile
+        JPanel boardPanel = new JPanel(new GridLayout(Rows, Columns));
+        // create each piece & colors the tile
         for (int i = 0; i < Rows; i++) {
             for (int j = 0; j < Columns; j++) {
-                //creates jPanel for each tile initialized
+                // creates JPanel for each tile initialized
                 BoardPanel panel = new BoardPanel(i, j);
-                
-                //colors each tile
+
+                // colors each tile
                 panel.setBackground((i + j) % 2 == 0 ? Color.darkGray : Color.WHITE);
                 panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                //Creates another JLabel on top that displays chess piece
-                //idk how lines 41-43 work but i think they make it bigger and centered
-                //(i just added it from the example)
+                // Creates another JLabel on top that displays chess piece
                 JLabel piece = new JLabel(getPieceUnicode(i, j));
                 piece.setFont(new Font("Serif", Font.BOLD, 32));
                 piece.setHorizontalAlignment(JLabel.CENTER);
                 piece.setVerticalAlignment(JLabel.CENTER);
                 panel.add(piece, BorderLayout.CENTER);
 
-                //copied from example to handle mouse clicks
-                panel.addMouseListener(new MouseAdapter() {
+                // copied from example to handle mouse clicks
+                panel.addMouseListener(new MouseAdapter() 
+                {
                     @Override
                     public void mouseClicked(MouseEvent e) 
                     {
@@ -62,101 +58,113 @@ public class DisplayBoard {
                     }
                 });
 
-                chessBoardpieces[i][j] = panel;
-                frame.add(panel);
+                chessBoardPieces[i][j] = panel;
+                boardPanel.add(panel);
             }
         }
+        frame.add(boardPanel, BorderLayout.CENTER);
+
+        // Create the forfeit button and add it to the frame
+        JButton forfeitButton = new JButton("Forfeit");
+        forfeitButton.addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                handleForfeitButtonClick();
+            }
+        });
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(forfeitButton);
+        frame.add(buttonPanel, BorderLayout.EAST);
+
         frame.pack();
         frame.setVisible(true);
     }
+
     /**
-     * Handles Mouse input and switches location of piece
-     * if mouse selects a new location
+     * Handles the forfeit button click
+     */
+    private void handleForfeitButtonClick() {
+        int response = JOptionPane.showConfirmDialog(frame, "Are you sure you want to forfeit the game?", "Forfeit Game", JOptionPane.YES_NO_OPTION);
+        if (response == JOptionPane.YES_OPTION) {
+            userInput = "forfeit";
+            frame.dispose();
+        }
+    }
+
+    /**
+     * Handles Mouse input and switches location of piece if mouse selects a new location
      * @param clickedPanel
      */
-    private void handleMouseClick(BoardPanel clickedPanel) 
-    {
+    private void handleMouseClick(BoardPanel clickedPanel) {
         JLabel clickedLabel = getLabelFromPanel(clickedPanel);
-        
-        if (selectedPieceLabel == null) //no piece selected
-        {
-            //if a piece is selected without an end location
-            if (clickedLabel != null && !clickedLabel.getText().isEmpty()) 
-            {
+    
+        if (selectedPieceLabel == null) { // no piece selected
+            if (clickedLabel != null && !clickedLabel.getText().isEmpty()) {
                 selectedPieceLabel = clickedLabel;
-                selectedpiece = clickedPanel;
-                originalRow = selectedpiece.getRow();
-                originalColumn = selectedpiece.getColumn();
+                selectedPiece = clickedPanel;
+                originalRow = selectedPiece.getRow();
+                originalColumn = selectedPiece.getColumn();
                 originalPieceText = selectedPieceLabel.getText();
-                selectedpiece.setBorder(BorderFactory.createLineBorder(Color.RED));
+                if (selectedPiece != null) { // Ensure selectedPiece is not null
+                    selectedPiece.setBorder(BorderFactory.createLineBorder(Color.RED));
+                }
             }
-        }   
-        else 
-        {
-            // Move the piece if its different from beginnning location
-            
-            if (clickedPanel != selectedpiece) 
-            {
-
+        } else {
+            if (clickedPanel != selectedPiece) {
                 JLabel targetLabel = getLabelFromPanel(clickedPanel);
-                setMove(selectedpiece, clickedPanel);
-                
-                if (targetLabel != null && getDisplayMoveValid() == true) 
-                {
-                    // Move the piece to the target piece
+                setMove(selectedPiece, clickedPanel);
+                boolean test = getDisplayMoveValid();
+                if (targetLabel != null || getDisplayMoveValid()) {
                     targetLabel.setText(selectedPieceLabel.getText());
-                    selectedPieceLabel.setText(""); // clears initial spot
+                    selectedPieceLabel.setText(""); // Clears initial spot
                     setDisplayMoveValid(false);
                 }
-                else 
-                {
-                    // Display error message if the move is invalid
+                if (!getDisplayMoveValid()) {
                     resetPiecePosition();
                 }
-                //else{should display error message of some sort}
-                //this is to create a sense of movement (if that makes sense im tired)
-                selectedpiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                if (selectedPiece != null) { // Ensure selectedPiece is not null
+                    selectedPiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                }
                 selectedPieceLabel = null;
-                selectedpiece = null;
-                
+                selectedPiece = null;
             }
         }
     }
 
     private void resetPiecePosition() {
-        JLabel originalLabel = getLabelFromPanel(chessBoardpieces[originalRow][originalColumn]);
-        selectedPieceLabel.setText("");
+        JLabel originalLabel = getLabelFromPanel(chessBoardPieces[originalRow][originalColumn]);
         originalLabel.setText(originalPieceText);
+        selectedPieceLabel.setText("");
+        selectedPiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        selectedPieceLabel = null;
+        selectedPiece = null;
     }
 
-    public void setMove(String input)
-    {
+    public void setMove(String input) {
         userInput = input;
     }
-    public void setMove(BoardPanel selectedpiece, BoardPanel clickedPanel)
-    {
-        userInput = String.valueOf(selectedpiece.getColumn());
-        userInput += String.valueOf(selectedpiece.getRow());
+
+    public void setMove(BoardPanel selectedPiece, BoardPanel clickedPanel) {
+        userInput = String.valueOf(selectedPiece.getColumn());
+        userInput += String.valueOf(selectedPiece.getRow());
         userInput += " ";
         userInput += String.valueOf(clickedPanel.getColumn());
         userInput += String.valueOf(clickedPanel.getRow());
-
     }
-    public void setDisplayMoveValid(boolean statement)
-    {
+
+    public void setDisplayMoveValid(boolean statement) {
         moveValid = statement;
     }
 
-    public boolean getDisplayMoveValid()
-    {
+    public boolean getDisplayMoveValid() {
         return moveValid;
     }
 
-    public String getMove()
-    {
+    public String getMove() {
         return userInput;
     }
-    
 
     /**
      * returns label from JPanel
@@ -167,7 +175,7 @@ public class DisplayBoard {
         return (JLabel) panel.getComponent(0);
     }
 
-    //I copied this directly from example... it works so idc
+    // I copied this directly from example... it works so idc
     /**
      * used to provide location and unicode type for each piece
      * @param row
@@ -198,5 +206,23 @@ public class DisplayBoard {
             return (row == 6) ? UNICODE_PIECES[5] : UNICODE_PIECES[11]; // Pawns
         }
         return ""; // Empty space for non-piece areas
+    }
+
+    private class BoardPanel extends JPanel {
+        private int row, column;
+
+        public BoardPanel(int row, int column) {
+            this.row = row;
+            this.column = column;
+            setLayout(new BorderLayout());
+        }
+
+        public int getRow() {
+            return row;
+        }
+
+        public int getColumn() {
+            return column;
+        }
     }
 }

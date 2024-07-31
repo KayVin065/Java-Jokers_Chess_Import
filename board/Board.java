@@ -163,8 +163,12 @@ public class Board {
      * Takes in two Strings that represent the user input coordinates
      * @param input String representing the "to" and "from" coordinates as one line
      */
-    public void movePiece(int fromX, int fromY, int toX, int toY, Player player)
+    public void movePiece(String input, Player player)
     {
+        int fromY = Character.getNumericValue(input.charAt(0));//a
+        int fromX = Character.getNumericValue(input.charAt(1)); //translateMove(input.charAt(1));
+        int toY = Character.getNumericValue(input.charAt(3));
+        int toX = Character.getNumericValue(input.charAt(4));//translateMove(input.charAt(4));
         Piece temp = board[fromX][fromY].getPiece();
 
         board[fromX][fromY].piece = null;
@@ -198,9 +202,9 @@ public class Board {
         }
         if(temp.validMove(board, board[fromPosx][fromPosy], board[toPosx][toPosy], player))
         {
-            movePiece(fromPosx, fromPosy, toPosx, toPosy, player);
             return true;
-        } else 
+        } 
+        else 
         {
             JOptionPane.showMessageDialog(null, "Error! wrong piece movement!", "Error", JOptionPane.ERROR_MESSAGE);
             return false;

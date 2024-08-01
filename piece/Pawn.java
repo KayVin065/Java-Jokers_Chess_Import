@@ -49,7 +49,9 @@ public class Pawn extends Piece {
         }
         // Capture diagonally
 
-        return Math.abs(xEnd - x) == 1 && yEnd == y + direction && end.getPiece() != null && !end.getPiece().getColor().equals(this.getColor());
+        return(Math.abs(yEnd - y) == 1 && xEnd == x + direction && end.getPiece() != null && !end.getPiece().getColor().equals(this.getColor()));
+        
+        
     }
 
     /**

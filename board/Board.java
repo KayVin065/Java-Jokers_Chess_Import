@@ -25,6 +25,8 @@ public class Board {
     private JLabel selectedPieceLabel = null;
     private BoardPanel selectedPiece = null;
     private final JFrame frame = new JFrame("Chess Board");
+    private JLabel turnLabel = new JLabel("Current Turn: " + (currentTurn != null ? currentTurn.getColor() : "None"), SwingConstants.CENTER);
+
     //
     public void setCurrentPlayer(Player current)
     {
@@ -109,6 +111,10 @@ public class Board {
         frame.setLayout(new BorderLayout());
         frame.setSize(600, 600);
 
+        //display players turn
+        turnLabel.setFont(new Font("Serif", Font.BOLD, 16));
+        frame.add(turnLabel, BorderLayout.NORTH);
+
         JPanel boardPanel = new JPanel(new GridLayout(Rows, Columns));
         // create each piece & colors the tile
         for (int i = 0; i < Rows; i++) {
@@ -117,7 +123,7 @@ public class Board {
                 BoardPanel panel = new BoardPanel(i, j);
 
                 // colors each tile
-                panel.setBackground((i + j) % 2 == 0 ? Color.darkGray : Color.WHITE);
+                panel.setBackground((i + j) % 2 == 0 ? Color.getHSBColor(.1f, .6f, .4f) : Color.WHITE);
                 panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 // Creates another JLabel on top that displays chess piece
 
@@ -129,7 +135,7 @@ public class Board {
 
                 }
                 
-                piece.setFont(new Font("Serif", Font.BOLD, 32));
+                piece.setFont(new Font("Serif", Font.BOLD, 90));
                 piece.setHorizontalAlignment(JLabel.CENTER);
                 piece.setVerticalAlignment(JLabel.CENTER);
                 panel.add(piece, BorderLayout.CENTER);
@@ -209,6 +215,13 @@ public class Board {
         }
     }
 
+    public void updateTurnDisplay(Player currentTurn) {
+        if (currentTurn != null) 
+        {
+            turnLabel.setText("Current Turn: " + currentTurn.getColor());
+        } 
+    }
+
     public void setMove(String move)
     {
         userInput = move;
@@ -234,9 +247,12 @@ public class Board {
             for (int j = 0; j < Columns; j++) {
                 JLabel pieceLabel = getLabelFromPanel(chessBoardPieces[i][j]);
                 Piece piece = board[i][j].getPiece();
-                if (piece != null) {
+                if (piece != null) 
+                {
                     pieceLabel.setText(piece.getUnicode());
-                } else {
+                } 
+                else 
+                {
                     pieceLabel.setText("");
                 }
             }
@@ -275,14 +291,12 @@ public class Board {
 
         if(temp.getColor() == null ? player.getColor() != null : !temp.getColor().equals(player.getColor()))
         {
-            JOptionPane.showMessageDialog(null, "Error! you cannot move your opponets piece!",
-             "Error", JOptionPane.ERROR_MESSAGE);
+            
              return false;
         }
         if(toTemp != null && temp.getColor().equals(toTemp.getColor()))
         {
             System.out.println("Error! you cannot take your own piece!");
-            JOptionPane.showMessageDialog(null, "Error! you cannot take your own piece!", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         if(temp.validMove(board, board[fromPosx][fromPosy], board[toPosx][toPosy], player))
@@ -291,44 +305,126 @@ public class Board {
         } 
         else 
         {
-            JOptionPane.showMessageDialog(null, "Error! wrong piece movement!", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
 
-    public boolean isKingChecked(Player currentTurn) {
-        int kingX = -1, kingY = -1;
+    // public boolean isKingChecked(Player currentTurn) {
+    //     int kingX = -1, kingY = -1;
         
-        // Find the king's position for the current player
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                Piece piece = board[i][j].getPiece();
-                if (piece != null && piece instanceof King && piece.getColor().equals(currentTurn.getColor())) {
-                    kingX = i;
-                    kingY = j;
-                    break;
+    //     // Find the king's position for the current player
+    //     for (int i = 0; i < 8; i++) {
+    //         for (int j = 0; j < 8; j++) {
+    //             Piece piece = board[i][j].getPiece();
+    //             if (piece != null && piece instanceof King && piece.getColor().equals(currentTurn.getColor())) {
+    //                 kingX = i;
+    //                 kingY = j;
+    //                 break;
+    //             }
+    //         }
+    //     }
+    
+    //     if (kingX == -1 || kingY == -1) {
+    //         JOptionPane.showMessageDialog(null, currentTurn.getColor() + ",You lose!!!", "booo!", JOptionPane.PLAIN_MESSAGE);
+    //         System.exit(1);
+    //     }
+    
+    //     // Check if any opponent piece can move to the king's position
+    //     for (int i = 0; i < 8; i++) {
+    //         for (int j = 0; j < 8; j++) {
+    //             Piece piece = board[i][j].getPiece();
+    //             if (piece != null && !piece.getColor().equals(currentTurn.getColor())) {//error could e here
+    //                 if (piece.validMove(board, board[i][j], board[kingX][kingY], currentTurn)) {
+    //                     return true;
+    //                 }
+    //             }
+    //         }
+    //     }
+    
+    //     return false;
+    // }
+    
+
+    // returns the other team's king's position in a Spot variable (AKA board[x][y])
+    public Spot getOtherTeamKingPosition(Player currentTurn) {
+
+        Spot kingPosition = new Spot();
+
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                if(board[i][j].getPiece() instanceof King && !board[i][j].getPiece().getColor().equals(currentTurn.getColor())) {
+                    kingPosition = board[i][j];
                 }
             }
         }
-    
-        if (kingX == -1 || kingY == -1) {
-            JOptionPane.showMessageDialog(null, currentTurn.getColor() + ",You lose!!!", "booo!", JOptionPane.PLAIN_MESSAGE);
-            System.exit(1);
+        return kingPosition;
+    }
+
+        // returns the current team's king's position in a Spot variable (AKA board[x][y])
+        public Spot getTeamKingPosition(Player currentTurn) {
+
+            Spot kingPosition = new Spot();
+
+            for(int i = 0; i < 8; i++) {
+                for(int j = 0; j < 8; j++) {
+                    if(board[i][j].getPiece() instanceof King && board[i][j].getPiece().getColor().equals(currentTurn.getColor())) {
+                        kingPosition = board[i][j];
+                    }
+                }
+            }
+            return kingPosition;
         }
-    
-        // Check if any opponent piece can move to the king's position
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                Piece piece = board[i][j].getPiece();
-                if (piece != null && !piece.getColor().equals(currentTurn.getColor())) {//error could e here
-                    if (piece.validMove(board, board[i][j], board[kingX][kingY], currentTurn)) {
+
+    // returns true if the king is currently checked, returns false otherwise
+    // Piece checkKing is only passed so it can be updated in the main code and we can know what piece is able to check the king
+    public boolean isChecked(Spot kingPosition, Player currentTurn, Piece checkKing, Spot checkKingPosition) {
+        Piece temp = null;
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                // if a spot has a piece of same color as currentTurn, and validMove() to the king's position returns true, king is checked
+                // and return true
+
+                if(board[i][j].getPiece() != null && board[i][j].getPiece().getColor().equals(currentTurn.getColor())) {
+
+                    // get temp piece for the potential piece that can check the king to pass to validMove()
+                    temp = board[i][j].getPiece();
+                    // if it can move to the king, it has the king checked
+                
+                    if(checkKing != null && checkKing.validMove(board, board[i][j], kingPosition, currentTurn) == true) {
+                        checkKing = board[i][j].getPiece();
+                        checkKingPosition = board[i][j];
                         return true;
                     }
                 }
             }
         }
-    
         return false;
     }
-    
+
+    public boolean isCheckmated(Spot kingPosition, Player currentTurn, Piece checkKing, Spot checkKingPosition) {
+        // CASE1: King cannot make a move.
+        // checkPiece = current temp piece from each spot to pass to validMove() to see if it can be moved to by the King
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+
+                if(kingPosition.getPiece().validMove(board, kingPosition, board[i][j], currentTurn)) {
+                    // if king can move to a spot (this loop checks for every spot), see if it is stil checked in that current spot. The king
+                    // must be able to not only move, but not be captured in the new position. Use checkKing in this because it holds the saved 
+                    // piece from isChecked() that is checking the king.
+                    if(isChecked(kingPosition, currentTurn, checkKing, checkKingPosition) == false) {
+                        return false;
+                    }
+                }
+                // CASE2: No piece on the King's team can capture the piece checking the King.
+                // checks if every spot on the board has a piece that is on the king's team that is capable of capturing the piece checking the king.
+                if(board[i][j].getPiece() != null && board[i][j].getPiece().getColor().equals(currentTurn.getColor()) && board[i][j].getPiece().validMove(board, board[i][j], checkKingPosition, currentTurn)) {
+                    return false;
+                }
+
+                // CASE3: A piece on the King's team can sacrifice themselves by blocking the piece checking the king from capturing it.
+                // MAY NOT IMPLEMENT, LACK OF TIME
+            }
+        }
+        return true;
+    }
 }

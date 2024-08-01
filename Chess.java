@@ -13,7 +13,6 @@ public class Chess {
     {
     start();  
     }
-/* */
     /**
      * Initializes the game attributes
      */
@@ -23,6 +22,7 @@ public class Chess {
         white = new Player("white");
         black = new Player("black");
         board.setCurrentPlayer(white);
+        board.updateTurnDisplay(white);
         play(white);
     }
 
@@ -38,15 +38,15 @@ public class Chess {
             System.out.println("Enter move formatted as \"[FROM] [TO]\" EX: \"E2 E4\": ");
             System.out.println(currentTurn.getColor() + " player enter move: ");
             System.out.println(userInput);
-            if(board.isKingChecked(currentTurn) == true)
-            {
-                JOptionPane.showMessageDialog(null, currentTurn.getColor() + ", YOUR KING IS IN CHECK!!!", "WARNING!", JOptionPane.PLAIN_MESSAGE);
-            }
+            // if(board.isChecked(kingPosition, currentTurn, checkKing, checkKingPosition)(currentTurn) == true)
+            // {
+            //     JOptionPane.showMessageDialog(null, currentTurn.getColor() + ", YOUR KING IS IN CHECK!!!", "WARNING!", JOptionPane.PLAIN_MESSAGE);
+            // }
             while (userInput == null) 
             {
                 userInput = board.getMove(); 
                 try {
-                    Thread.sleep(1000); // Avoid busy-waiting
+                    Thread.sleep(100); // Avoid busy-waiting
                 } catch (InterruptedException e) 
                 {
                    e.printStackTrace();
@@ -66,7 +66,6 @@ public class Chess {
                 }
                 end();
             }
-            //        JOptionPane.showMessageDialog(null, "message", "Error", JOptionPane.ERROR_MESSAGE);
             System.out.println(userInput);
             if(board.canMove(userInput, currentTurn) == false)
             {
@@ -89,6 +88,7 @@ public class Chess {
                 board.setMove(null);
                 userInput = null;
                 board.updateBoardDisplay();
+                board.updateTurnDisplay(white);
                 play(white);
             }
             else if("white".equals(currentTurn.getColor()))
@@ -97,12 +97,10 @@ public class Chess {
                 board.setMove(null);
                 userInput = null;
                 board.updateBoardDisplay();
+                board.updateTurnDisplay(black);
                 play(black);
             }
-            if (end()) {
-                System.out.println("Game Over.");
-                System.exit(0);
-            }
+            
         }
 
     
@@ -110,14 +108,9 @@ public class Chess {
     /**
      * Ends the game and determines a winner or a draw
      * 
-     * calls isCheckmate & returns true if isCheckmate returns true - determines winner
-     * calls isCheck & returns true if isCheck returns true - determines draw if both are checked (eh)
      */
-    
-       
-    public boolean end()
+    public void end()
     {
-
-        return false;
+        System.exit(0);
     }
 }  

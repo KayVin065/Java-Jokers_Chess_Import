@@ -36,6 +36,7 @@ public class King extends Piece {
         return x <= 1 && y <= 1;
     }
 
+
     /**
      * Overridden toString method to configure how a King is output to the screen
      */

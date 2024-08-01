@@ -57,3 +57,12 @@ public class Queen extends Piece {
 
     return false; // Not a valid move for a queen
 }
+
+    /**
+     * Overridden toString method to configure how a Queen is output to the screen
+     */
+    @Override
+    public String toString() {
+        return " " + firstChar + "Q";
+    }
+}

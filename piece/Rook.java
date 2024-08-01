@@ -33,7 +33,7 @@ public class Rook extends Piece {
         int xEnd = end.getX();
         int yEnd = end.getY();
 
-        if (xStart != xEnd && yStart = yEnd) {
+        if (xStart != xEnd && yStart == yEnd) {
             return false;
         }
 

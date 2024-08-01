@@ -13,7 +13,7 @@ import piece.*;
 public class Board {
     public Spot[][] board = new Spot[8][8];
     private Player currentTurn = null;
-    private String userInput;
+    private String userInput = null;
 
     //
     //private String userInput = null;
@@ -26,9 +26,9 @@ public class Board {
     private BoardPanel selectedPiece = null;
     private final JFrame frame = new JFrame("Chess Board");
     //
-    public void setCurrentPlayer(Player currentTurn)
+    public void setCurrentPlayer(Player current)
     {
-        this.currentTurn = currentTurn;
+        this.currentTurn = current;
     }
 
     public Player getCurrentTurn()
@@ -170,9 +170,9 @@ public class Board {
     , "Forfeit Game", JOptionPane.YES_NO_OPTION);
     if (response == JOptionPane.YES_OPTION) 
      {
-         //userInput = "forfeit";
-           frame.dispose();
-        }
+        setMove("forfeit");
+        frame.dispose();
+    }
     }
 
      /**
@@ -209,6 +209,11 @@ public class Board {
         }
     }
 
+    public void setMove(String move)
+    {
+        userInput = move;
+    }
+
     public void setMove(BoardPanel selectedPiece, BoardPanel clickedPanel) 
     {
         userInput = String.valueOf(selectedPiece.getColumn());
@@ -216,6 +221,7 @@ public class Board {
         userInput += " ";
         userInput += String.valueOf(clickedPanel.getColumn());
         userInput += String.valueOf(clickedPanel.getRow());
+        setMove(userInput);
     }
 
     public String getMove()
@@ -223,6 +229,19 @@ public class Board {
         return userInput;
     }
     
+    public void updateBoardDisplay() {
+        for (int i = 0; i < Rows; i++) {
+            for (int j = 0; j < Columns; j++) {
+                JLabel pieceLabel = getLabelFromPanel(chessBoardPieces[i][j]);
+                Piece piece = board[i][j].getPiece();
+                if (piece != null) {
+                    pieceLabel.setText(piece.getUnicode());
+                } else {
+                    pieceLabel.setText("");
+                }
+            }
+        }
+    }
 
     /**
      * Takes in two Strings that represent the user input coordinates
@@ -240,6 +259,7 @@ public class Board {
         board[toX][toY].piece = temp;
 
         System.out.println();
+        
         //display();
         
     }
@@ -255,7 +275,7 @@ public class Board {
 
         if(temp.getColor() == null ? player.getColor() != null : !temp.getColor().equals(player.getColor()))
         {
-            JOptionPane.showMessageDialog(null, "Error! you cannot your opponets piece!",
+            JOptionPane.showMessageDialog(null, "Error! you cannot move your opponets piece!",
              "Error", JOptionPane.ERROR_MESSAGE);
              return false;
         }

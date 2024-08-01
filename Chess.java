@@ -6,8 +6,11 @@ public class Chess {
     public static Board board = new Board();
     Player white;
     Player black;
-    Board chessBoard = new Board();
-    public void main(String[] args) {
+    String userInput = null;
+
+
+    public void main(String[] args) 
+    {
     start();  
     }
 /* */
@@ -16,7 +19,7 @@ public class Chess {
      */
     public void start() 
     {
-        chessBoard.createChessBoard();
+        board.createChessBoard();
         white = new Player("white");
         black = new Player("black");
         board.setCurrentPlayer(white);
@@ -31,26 +34,26 @@ public class Chess {
      public void play(Player currentTurn) 
      {
         // currently outputs an infinite loop !!!
+    
             System.out.println("Enter move formatted as \"[FROM] [TO]\" EX: \"E2 E4\": ");
             System.out.println(currentTurn.getColor() + " player enter move: ");
-            String userInput = board.getMove();
+            System.out.println(userInput);
             if(board.isKingChecked(currentTurn) == true)
             {
                 JOptionPane.showMessageDialog(null, currentTurn.getColor() + ", YOUR KING IS IN CHECK!!!", "WARNING!", JOptionPane.PLAIN_MESSAGE);
             }
             while (userInput == null) 
             {
-                //userInput = Board.getMove(); 
+                userInput = board.getMove(); 
                 try {
-                    Thread.sleep(100); // Avoid busy-waiting
+                    Thread.sleep(1000); // Avoid busy-waiting
                 } catch (InterruptedException e) 
                 {
                    e.printStackTrace();
                 }
             }
-            
-                
-            
+            System.out.println(userInput);
+
             if("forfeit".equals(userInput))
             {
                 if("white".equals(currentTurn.getColor()))
@@ -68,6 +71,8 @@ public class Chess {
             if(board.canMove(userInput, currentTurn) == false)
             {
                 System.out.println("\nERROR incorrect move");
+                board.setMove(null);
+                userInput = null;
                 board.setCurrentPlayer(currentTurn);
                 play(currentTurn);
             }
@@ -79,11 +84,15 @@ public class Chess {
             if("black".equals(currentTurn.getColor()))
             {
                 board.setCurrentPlayer(white);
+                board.setMove(null);
+                userInput = null;
                 play(white);
             }
             else if("white".equals(currentTurn.getColor()))
             {
                 board.setCurrentPlayer(black);
+                board.setMove(null);
+                userInput = null;
                 play(black);
             }
             if (end()) {

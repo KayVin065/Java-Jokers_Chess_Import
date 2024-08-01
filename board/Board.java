@@ -13,7 +13,7 @@ import piece.*;
 public class Board {
     public Spot[][] board = new Spot[8][8];
     private Player currentTurn = null;
-    private String userInput;
+    private String userInput = null;
 
     //
     //private String userInput = null;
@@ -26,9 +26,9 @@ public class Board {
     private BoardPanel selectedPiece = null;
     private final JFrame frame = new JFrame("Chess Board");
     //
-    public void setCurrentPlayer(Player currentTurn)
+    public void setCurrentPlayer(Player current)
     {
-        this.currentTurn = currentTurn;
+        this.currentTurn = current;
     }
 
     public Player getCurrentTurn()
@@ -170,9 +170,9 @@ public class Board {
     , "Forfeit Game", JOptionPane.YES_NO_OPTION);
     if (response == JOptionPane.YES_OPTION) 
      {
-         //userInput = "forfeit";
-           frame.dispose();
-        }
+        setMove("forfeit");
+        frame.dispose();
+    }
     }
 
      /**
@@ -209,6 +209,11 @@ public class Board {
         }
     }
 
+    public void setMove(String move)
+    {
+        userInput = move;
+    }
+
     public void setMove(BoardPanel selectedPiece, BoardPanel clickedPanel) 
     {
         userInput = String.valueOf(selectedPiece.getColumn());
@@ -216,6 +221,7 @@ public class Board {
         userInput += " ";
         userInput += String.valueOf(clickedPanel.getColumn());
         userInput += String.valueOf(clickedPanel.getRow());
+        setMove(userInput);
     }
 
     public String getMove()

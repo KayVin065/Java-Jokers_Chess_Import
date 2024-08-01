@@ -4,26 +4,25 @@
  */
 package piece;
 import board.*;
-
 public class Pawn extends Piece {
-    private char firstChar;
 
     /**
      * Initializes a Pawn object with the desired color and position
      * @param color The color of the Pawn ("white" or "black")
      */
-    public Pawn(String color) {
-        super(color);
-        firstChar = color.charAt(0);
+    public Pawn(String color, String unicode) {
+        super(color, unicode);
     }
 
     /**
      * Validates whether the move inputted by the user is a valid move for this piece
+     * @param <Player>
      */
     @Override
     public boolean validMove(Spot[][] board, Spot start, Spot end, Player currentTurn) {
-        if (end.getPiece() != null && !(start.getPiece().getColor().equals(currentTurn.getColor()))) { 
+        if (end.getPiece() != null && end.getPiece().getColor().equals(start.getPiece().getColor())) { 
             return false;
+            
         }
 
         int x = start.getX();
@@ -46,20 +45,10 @@ public class Pawn extends Piece {
                 }
             }
         }
-
         // Capture diagonally
-        if (Math.abs(xEnd - x) == 1 && yEnd == y + direction && end.getPiece() != null && !end.getPiece().getColor().equals(this.getColor())) {
-            return true;
-        }
 
-        return false;
-    }
-
-    /**
-     * Overridden toString method to configure how a Pawn is output to the screen
-     */
-    @Override
-    public String toString() {
-        return " " + firstChar + "p";
+        return(Math.abs(yEnd - y) == 1 && xEnd == x + direction && end.getPiece() != null && !end.getPiece().getColor().equals(this.getColor()));
+        
+        
     }
 }

@@ -1,64 +1,159 @@
 import board.*;
+import javax.swing.JOptionPane;
+
+import piece.Piece;
 import piece.Player;
-import java.util.Scanner;
+
 public class Chess {
-    protected Board board = new Board();
+    public static Board board = new Board();
     Player white;
     Player black;
-    Scanner scnr = new Scanner(System.in);
-    String userInput;
-    
-    public void main(String[] args) {
-        start();  
+    String userInput = null;
 
-    }
-
-    /**
-     * Initializes the game attributes
-     */
-    public void start() {
+    public void main(String[] args) 
+    {
+        board.createChessBoard();
         white = new Player("white");
         black = new Player("black");
-
-        board.display();
+        board.setCurrentPlayer(white);
+        board.updateTurnDisplay(white);
         play(white);
-
     }
 
     /**
      * The main loop that executes for playing the game
      * Alternates turns, checks for check/checkmate, gets moves from player
      */
-    public void play(Player currentTurn) {
-        // currently outputs an infinite loop !!!
-            System.out.println("Enter move formatted as \"[FROM] [TO]\" EX: \"E2 E4\": ");
-            System.out.print(currentTurn.getColor() + " player enter move: ");
-            userInput = scnr.nextLine();
+    
+     public void play(Player currentTurn) 
+     {
+        Piece checkKing = null; // the piece that is checking the king
+        Spot checkKingPosition = new Spot(); // the position of the piece checking the king
+        Spot kingPosition = new Spot(); // the position of the opposing king (the king that's being checked)
+        boolean isKingChecked = false; // whether or not the king is checked
+        boolean isKingCheckmated = false; // whether or not the king is checkmated
+        
+            while (userInput == null) 
+            {
+                userInput = board.getMove(); 
+                try {
+                    Thread.sleep(1000); // Avoid busy-waiting
+                } catch (InterruptedException e) 
+                {
+                   e.printStackTrace();
+                }
+            }
+
+            if("forfeit".equals(userInput))
+            {
+                if("white".equals(currentTurn.getColor()))
+                {
+                    JOptionPane.showMessageDialog(null, "Black wins!", "Congratulation!", JOptionPane.PLAIN_MESSAGE);
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "White wins!", "Congratulation!", JOptionPane.PLAIN_MESSAGE);
+                }
+                end();
+            }
+            
+            // if true, end game immediately because there is no shot of the king surviving.
+            // if false, allow the player to make a move and call isChecked() immediately after canMove() is called.
+
+            if(isKingChecked == true)
+            {
+                JOptionPane.showMessageDialog(null, currentTurn.getColor() + ", YOUR KING IS IN CHECK!!!", "WARNING!", JOptionPane.PLAIN_MESSAGE);
+
+                // only if the king is checked do you call isKingCheckmated(). if that returns false, end the game. otherwise, set isKingCheckmated
+                // to false again.
+                isKingCheckmated = board.isCheckmated(kingPosition, currentTurn, checkKing, checkKingPosition);
+            
+                if(isKingCheckmated == true) {
+                    end();
+                } 
+            }
+            else {       
+
+            System.out.println(userInput);
+
             if(board.canMove(userInput, currentTurn) == false)
             {
                 System.out.println("\nERROR incorrect move");
+                board.setMove(null);
+                userInput = null;
+                board.setCurrentPlayer(currentTurn);
+                board.updateBoardDisplay();
+        
                 play(currentTurn);
-            }
-            //board.movePiece(userInput, currentTurn);
-            if(currentTurn.getColor() == "black")
-            {
-                play(white);
-            }
-            else if(currentTurn.getColor() == "white")
-            {
-                play(black);
-            }
+            } 
+            else {
+                board.movePiece(userInput, currentTurn);
 
+                // if move is valid, call isChecked()
+                if(currentTurn.getColor().equals("black"))
+                {
+                    if(board.getOtherTeamKingPosition(currentTurn).getPiece() == null || board.getTeamKingPosition(currentTurn).getPiece() == null) {
+                        JOptionPane.showMessageDialog(null, "Black wins!", "Congratulation!", JOptionPane.PLAIN_MESSAGE);
+                        end();
+                    }
+
+                    kingPosition = board.getTeamKingPosition(currentTurn);
+                    isKingChecked = board.isChecked(kingPosition, currentTurn, checkKing, checkKingPosition);
+                    // may have conflicts if prior piece checking king no longer checks, but another piece does
+                    // if checkKing != null then there's a current piece checking the king; isKingChecked is still true, last effort failed and end game.
+                    if(isKingChecked == true) {
+                        end();
+                    }
+                    else { // isKingChecked == false
+                    // if the king is no longer in danger, reset checkKing and play like normal
+                        checkKing = null;
+                        isKingChecked = false;
+                    }
+
+                    board.setCurrentPlayer(white);
+                    board.updateTurnDisplay(white);
+                    board.setMove(null);
+                    userInput = null;
+                    board.updateBoardDisplay();
+                    play(white);
+            
+                } 
+                else if(currentTurn.getColor().equals("white"))
+                {
+                    if(board.getOtherTeamKingPosition(currentTurn).getPiece() == null || board.getTeamKingPosition(currentTurn).getPiece() == null) {
+                        JOptionPane.showMessageDialog(null, "White wins!", "Congratulation!", JOptionPane.PLAIN_MESSAGE);
+                        end();
+                    }
+
+                    kingPosition = board.getTeamKingPosition(currentTurn);
+                    isKingChecked = board.isChecked(kingPosition, currentTurn, checkKing, checkKingPosition);
+                    // may have conflicts if prior piece checking king no longer checks, but another piece does
+                    // if checkKing != null then there's a current piece checking the king; isKingChecked is still true, last effort failed and end game.
+                    if(isKingChecked == true) {
+                        end();
+                    }
+                    else { // isKingChecked == false
+                        // if the king is no longer in danger, reset checkKing and play like normal
+                        checkKing = null;
+                        isKingChecked = false;
+                    }
+
+                    board.setCurrentPlayer(black);
+                    board.updateTurnDisplay(black);
+                    board.setMove(null);
+                    userInput = null;
+                    board.updateBoardDisplay();
+                    play(black);
+                }
+            }
+        }
     }
 
     /**
-     * Ends the game and determines a winner or a draw
-     * 
-     * calls isCheckmate & returns true if isCheckmate returns true - determines winner
-     * calls isCheck & returns true if isCheck returns true - determines draw if both are checked (eh)
-     */
-    
-    public boolean end() {
-        return false;
+     * Ends the game 
+     */  
+    public void end()
+    {
+        System.exit(0);
     }
 }  

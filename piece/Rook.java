@@ -6,15 +6,13 @@ package piece;
 import board.*;
 
 public class Rook extends Piece {
-    private char firstChar;
-
     /**
      * Initializes a Rook object with the desired color and position
      * @param color The color of the Rook ("white" or "black")
      */
-    public Rook(String color) {
-        super(color);
-        firstChar = color.charAt(0);
+    public Rook(String color, String unicode) {
+        
+        super(color, unicode);
     }
 
     /**
@@ -22,45 +20,42 @@ public class Rook extends Piece {
      */
     @Override
     public boolean validMove(Spot[][] board, Spot start, Spot end, Player currentTurn) {
-        if (end.getPiece() != null && !(start.getPiece().getColor().equals(currentTurn.getColor()))) { 
+        // Check if the destination has a piece of the same color
+        if (end.getPiece() != null && start.getPiece().getColor().equals(end.getPiece().getColor())) {
             return false;
         }
 
-        int x = start.getX();
-        int y = start.getY();
+        int xStart = start.getX();
+        int yStart = start.getY();
+        int xEnd = end.getX();
+        int yEnd = end.getY();
 
-        if (x != end.getX() && y != end.getY()) {
+        if (xStart != xEnd && yStart != yEnd) {
             return false;
         }
 
         // Check if there are any pieces in the path
-        if (x == end.getX()) {
-            int min = Math.min(y, end.getY());
-            int max = Math.max(y, end.getY());
+        // Horizontal
+        if (xStart == xEnd) {
+            int min = Math.min(xStart, xEnd);
+            int max = Math.max(xStart, xEnd);
             for (int i = min + 1; i < max; i++) {
-                if (board[end.getX()][i].getPiece() != null) {
+                if (board[i][yStart].getPiece() != null) {
                     return false;
                 }
             }
         } 
+        // Vertical 
         else {
-            int min = Math.min(x, end.getX());
-            int max = Math.max(x, end.getX());
+            int min = Math.min(yStart, yEnd);
+            int max = Math.max(yStart, yEnd);
             for (int i = min + 1; i < max; i++) {
-                if (board[end.getX()][i].getPiece() != null) {
+                if (board[xStart][i].getPiece() != null) {
                     return false;
                 }
             }
         }
 
         return true;
-    }
-
-    /**
-     * Overridden toString method to configure how a Rook is output to the screen
-     */
-    @Override
-    public String toString() {
-        return " " + firstChar + "R";
     }
 }

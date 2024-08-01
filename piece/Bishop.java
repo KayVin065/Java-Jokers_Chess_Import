@@ -6,15 +6,13 @@ package piece;
 import board.*;
 
 public class Bishop extends Piece {
-    private char firstChar;
 
     /**
      * Initializes a Bishop object with the desired color and position
      * @param color The color of the Bishop ("white" or "black")
      */
-    public Bishop(String color) {
-        super(color);
-        firstChar = color.charAt(0);
+    public Bishop(String color, String unicode) {
+        super(color, unicode);
     }
 
     /**
@@ -22,7 +20,7 @@ public class Bishop extends Piece {
      */
     @Override
     public boolean validMove(Spot[][] board, Spot start, Spot end, Player currentTurn) {
-        if (end.getPiece() != null && !(start.getPiece().getColor().equals(currentTurn.getColor()))) { 
+        if (end.getPiece() != null && end.getPiece().getColor().equals(start.getPiece().getColor())) { 
             return false;
         }
         
@@ -35,29 +33,22 @@ public class Bishop extends Piece {
         }
         
 
-        int xDirection = start.getX() < end.getX() ? 1 : -1;
-        int yDirection = start.getY() < end.getY() ? 1 : -1;
+        int xDirection = start.getX() < end.getX() ?  1 : -1;
+        int yDirection = start.getY() < end.getY() ?  1 : -1;
 
-        int xCurrent = start.getX() * xDirection;
-        int yCurrent = start.getY() * yDirection;
-
+        int xCurrent = start.getX() + xDirection;
+        int yCurrent = start.getY() + yDirection;
+        //System.out.println(board[xCurrent][yCurrent].getPiece());
         //this will check if there's any pieces in the way if there is, then the move isn't valid
         while (xCurrent != end.getX() && yCurrent != end.getY()) {
-            if (board[end.getX()][end.getY()].getPiece() != null) {
+        //    System.out.println(board[xCurrent][yCurrent].getPiece());
+            if (board[xCurrent][yCurrent].getPiece() != null) {
+
                 return false;
             }
             xCurrent += xDirection;
-            yCurrent += yDirection;
+            yCurrent += yDirection; 
         }
-
         return true;
-    }
-
-    /**
-     * Overridden toString method to configure how a Bishop is output to the screen
-     */
-    @Override
-    public String toString() {
-        return " " + firstChar + "B";
     }
 }

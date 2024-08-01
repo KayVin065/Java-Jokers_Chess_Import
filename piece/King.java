@@ -6,7 +6,7 @@ package piece;
 import board.*;
 
 public class King extends Piece {
-    private char firstChar;
+    private final char firstChar;
 
     /**
      * Initializes a King object with the desired color and position
@@ -19,7 +19,7 @@ public class King extends Piece {
 
     public String getPieceUnicode()
     {
-        
+        return unicode;
     }
     /**
      * Validates whether the move inputted by the user is valid for this piece

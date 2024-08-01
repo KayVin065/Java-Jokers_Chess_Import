@@ -47,4 +47,6 @@ public class Spot {
     public Piece getPiece () {
         return piece;
     }
+
+
 }

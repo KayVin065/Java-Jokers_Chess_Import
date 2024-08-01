@@ -28,6 +28,11 @@ public abstract class Piece {
         return this.color;
     }
 
+    public String getUnicode()
+    {
+        return this.unicode;
+    }
+
     /**
      * Implemented in each Piece subclass to check if a move is valid
      * @param <Player>

@@ -6,8 +6,7 @@ public class Chess {
     public static Board board = new Board();
     Player white;
     Player black;
-    DisplayBoard gameBoard = new DisplayBoard();
-
+    Board chessBoard = new Board();
     public void main(String[] args) {
     start();  
     }
@@ -17,10 +16,9 @@ public class Chess {
      */
     public void start() 
     {
-        gameBoard.createChessBoard();
+        chessBoard.createChessBoard();
         white = new Player("white");
         black = new Player("black");
-        board.display();
         board.setCurrentPlayer(white);
         play(white);
     }
@@ -35,14 +33,14 @@ public class Chess {
         // currently outputs an infinite loop !!!
             System.out.println("Enter move formatted as \"[FROM] [TO]\" EX: \"E2 E4\": ");
             System.out.println(currentTurn.getColor() + " player enter move: ");
-            String userInput = gameBoard.getMove();
+            String userInput = "06 07";
             if(board.isKingChecked(currentTurn) == true)
             {
                 JOptionPane.showMessageDialog(null, currentTurn.getColor() + ", YOUR KING IS IN CHECK!!!", "WARNING!", JOptionPane.PLAIN_MESSAGE);
             }
             while (userInput == null) 
             {
-                userInput = gameBoard.getMove(); 
+                //userInput = Board.getMove(); 
                 try {
                     Thread.sleep(100); // Avoid busy-waiting
                 } catch (InterruptedException e) 
@@ -70,29 +68,21 @@ public class Chess {
             if(board.canMove(userInput, currentTurn) == false)
             {
                 System.out.println("\nERROR incorrect move");
-                gameBoard.setMove(null);
-                gameBoard.setDisplayMoveValid(false);
                 board.setCurrentPlayer(currentTurn);
                 play(currentTurn);
             }
             else
             {  
                 board.movePiece(userInput, currentTurn);
-                gameBoard.setMove(null);
-                gameBoard.setDisplayMoveValid(true);
             }
             //board.movePiece(userInput, currentTurn);
             if("black".equals(currentTurn.getColor()))
             {
-                gameBoard.setDisplayMoveValid(false);
-                gameBoard.setMove(null);
                 board.setCurrentPlayer(white);
                 play(white);
             }
             else if("white".equals(currentTurn.getColor()))
             {
-                gameBoard.setDisplayMoveValid(false);
-                gameBoard.setMove(null);
                 board.setCurrentPlayer(black);
                 play(black);
             }

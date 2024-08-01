@@ -3,11 +3,11 @@
  * Represents a game board for a chess game
  */
 package board;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.*;
 import piece.*;
 
 public class Board {
@@ -15,16 +15,16 @@ public class Board {
     private Player currentTurn = null;
 
     //
-    private String userInput = null;
-    private String originalPieceText;
+    //private String userInput = null;
+    //private String originalPieceText;
     private final int Rows = 8;
     private final int Columns = 8;
     private final JPanel[][] chessBoardPieces = new BoardPanel[Rows][Columns];
-    private boolean moveValid;
+    //private boolean moveValid;
     // Variables to monitor the piece and piece selected
-    private JLabel selectedPieceLabel = null;
-    private BoardPanel selectedPiece = null;
-    private int originalRow, originalColumn;
+    //private JLabel selectedPieceLabel = null;
+    //private BoardPanel selectedPiece = null;
+    //private int originalRow, originalColumn;
     private final JFrame frame = new JFrame("Chess Board");
     //
     public void setCurrentPlayer(Player currentTurn)
@@ -37,17 +37,15 @@ public class Board {
         return currentTurn;
     }
 
-    /**
-     * Initializes an 8x8 board with pieces in original positions
-     */
+   
     public Board() {
         int spotNum = 0;
         for(int i = 0; i < 8; i++) {
             for(int j = 0; j < 8; j++) {
                 if(spotNum % 2 == 0) {
-                   // board[i][j] = new Spot(i, j, " ##", null);
+                    board[i][j] = new Spot(i, j, " ##", null);
                 } else {
-                    //board[i][j] = new Spot(i, j, "   ", null);
+                    board[i][j] = new Spot(i, j, "   ", null);
                 }
                 spotNum++;
             }
@@ -55,29 +53,7 @@ public class Board {
         }
         setOriginalPieces();
     }
-
-    /**
-     * Displays a board with rows numbered 1-8 and columns labeled A-H
-     * This will be called every time the board is updated or displayed
-     */
-    public void display() {
-        int columnNum = 8;
-        System.out.println("  A  B  C  D  E  F  G  H ");
-        for(int i = 0; i < 8; i++) {
-            System.out.print(columnNum);
-            
-            for(int j = 0; j < 8; j++) {
-                if(board[i][j].piece != null) {
-                    System.out.print(board[i][j].piece.toString());
-                } else {
-                    System.out.print(board[i][j].originalPlacement);
-                }
-            }
-            columnNum--;
-            System.out.println();
-        }
-        System.out.println();
-    }
+    
 /*
  * the idea is that the gui implentation mirrors the base code (original)
  */
@@ -142,9 +118,14 @@ public class Board {
                 panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 // Creates another JLabel on top that displays chess piece
 
-
+                JLabel piece = new JLabel("");
                 setOriginalPieces();
-                JLabel piece = new JLabel(board[i][j].getPieceUnicode());
+                if(board[i][j].getPiece() != null)
+                {
+                    piece = new JLabel(board[i][j].getPiece().getUnicode()); //getUnicode is a function in piece.java
+
+                }
+                
                 piece.setFont(new Font("Serif", Font.BOLD, 32));
                 piece.setHorizontalAlignment(JLabel.CENTER);
                 piece.setVerticalAlignment(JLabel.CENTER);
@@ -156,7 +137,7 @@ public class Board {
                     @Override
                     public void mouseClicked(MouseEvent e) 
                     {
-                        //handleMouseClick(panel);
+                        handleMouseClick(panel);
                     }
                 });
 
@@ -179,74 +160,9 @@ public class Board {
         frame.setVisible(true);
     }
 
-    /**
-     * Takes in user input and translates character into an int. Creates ints to be 
-     * used as actual element numbers for the board
-     * @param x The character that is supposed to be translated into an int
-     * @return Returns the translated number to aid with coordinate conversion
-     */
-    public static int translateMove(char x) {
-        switch (x)
-        {
-            case '8', 'A' -> {
-                return 0;
-            }
-            case '7', 'B' -> {
-                return 1;
-            }
-            case '6', 'C' -> {
-                return 2;
-            }
-            case '5', 'D' -> {
-                return 3;
-            }
-            case '4', 'E' -> {
-                return 4;
-            }
-            case '3', 'F' -> {
-                return 5;
-            }
-            case '2', 'G' -> {
-                return 6;
-            }
-            case '1', 'H' -> {
-                return 7;
-            }
-            default -> throw new AssertionError();
-        }
-    }
+    
 
-    public static int translateDisplayMove(char x) {
-        switch (x)
-        {
-            
-            case '7' -> {
-                return 1;
-            }
-            case '6' -> {
-                return 2;
-            }
-            case '5' -> {
-                return 3;
-            }
-            case '4' -> {
-                return 4;
-            }
-            case '3' -> {
-                return 5;
-            }
-            case '2' -> {
-                return 6;
-            }
-            case '1' -> {
-                return 7;
-            }
-            case '0' -> {
-                return 8;
-            }
-            default -> throw new AssertionError();
-        }
-    }
+    
 
     /**
      * Takes in two Strings that represent the user input coordinates
@@ -264,7 +180,7 @@ public class Board {
         board[toX][toY].piece = temp;
 
         System.out.println();
-        display();
+        //display();
         
     }
 

@@ -4,8 +4,10 @@
 package piece;
 import board.*;
 
+
 public abstract class Piece {
     protected String color;
+    protected String unicode;
     protected boolean isCaptured = false;
 
     /**
@@ -14,7 +16,9 @@ public abstract class Piece {
      */
     public Piece(String color) {
         this.color = color;
+        //this.unicode = unicode;
     }
+    
 
     /**
      * Gets the color of the Piece
@@ -24,8 +28,14 @@ public abstract class Piece {
         return this.color;
     }
 
+    public String getUnicode()
+    {
+        return this.unicode;
+    }
+
     /**
      * Implemented in each Piece subclass to check if a move is valid
+     * @param <Player>
      * @param board the board to be changed
      * @param start the "from" Spot 
      * @param end the "to" Spot

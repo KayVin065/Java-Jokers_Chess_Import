@@ -6,13 +6,13 @@ package piece;
 import board.*;
 
 public class Knight extends Piece {
-    private char firstChar;
+    private final char firstChar;
 
     /**
      * Initializes a Knight object with the desired color and position
      * @param color The color of the Knight ("white" or "black")
      */
-    public Knight(String color) {
+    public Knight(String color) { // String unicode
         super(color);
         firstChar = color.charAt(0);
     }
@@ -29,11 +29,7 @@ public class Knight extends Piece {
         int x = Math.abs(start.getX() - end.getX());
         int y = Math.abs(start.getY() - end.getY());
 
-        if (x * y == 2) {
-            return true;
-        }
-        
-        return false;
+        return x * y == 2;
     }
 
     /**

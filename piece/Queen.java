@@ -6,7 +6,7 @@ package piece;
 import board.*;
 
 public class Queen extends Piece {
-    private char firstChar;
+    private final char firstChar;
 
     /**
      * Initializes a Queen object with the desired color and position

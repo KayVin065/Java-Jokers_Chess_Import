@@ -82,6 +82,7 @@ public class Chess {
                         // may have conflicts if prior piece checking king no longer checks, but another piece does
                         // if checkKing != null then there's a current piece checking the king; isKingChecked is still true, last effort failed and end game.
                         if(isKingChecked == true) {
+                            System.out.println(currentTurn.getColor() + " lost!");
                             end();
                         }
                         else { // isKingChecked == false
@@ -100,12 +101,14 @@ public class Chess {
                     // may have conflicts if prior piece checking king no longer checks, but another piece does
                     // if checkKing != null then there's a current piece checking the king; isKingChecked is still true, last effort failed and end game.
                     if(isKingChecked == true) {
+                        System.out.println(currentTurn.getColor() + " lost!");
                         end();
                     }
                     else { // isKingChecked == false
                         // if the king is no longer in danger, reset checkKing and play like normal
                         checkKing = null;
                         isKingChecked = false;
+                        System.out.println(currentTurn.getColor() + " player's king is no longer checked!");
                     }
                     play(black);
                 }
@@ -128,12 +131,18 @@ public class Chess {
             {
                 kingPosition = board.getOtherTeamKingPosition(currentTurn);
                 isKingChecked = board.isChecked(kingPosition, currentTurn, checkKing, checkKingPosition);
+                if(isKingChecked == true) {
+                    System.out.println(currentTurn.getColor() + " player's king has been checked!");
+                }
                 play(white);
             }
             else if(currentTurn.getColor() == "white")
             {
                 kingPosition = board.getOtherTeamKingPosition(currentTurn);
                 isKingChecked = board.isChecked(kingPosition, currentTurn, checkKing, checkKingPosition);
+                if(isKingChecked == true) {
+                    System.out.println(currentTurn.getColor() + " player's king has been checked!");
+                }
                 play(black);
             }
         }

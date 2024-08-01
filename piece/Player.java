@@ -2,6 +2,7 @@
  * Represents a player of the Chess game
  */
 package piece; 
+
 public class Player {
     protected String color;
 

@@ -193,7 +193,7 @@ public class Board {
                     temp = board[i][j].getPiece();
                     // if it can move to the king, it has the king checked
                 
-                    if(checkKing != null && checkKing.validMove(board, board[i][j], kingPosition, currentTurn) == true) {
+                    if(temp != null && temp.validMove(board, board[i][j], kingPosition, currentTurn) == true) {
                         checkKing = board[i][j].getPiece();
                         checkKingPosition = board[i][j];
                         return true;

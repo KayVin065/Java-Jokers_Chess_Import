@@ -6,7 +6,7 @@ package piece;
 import board.*;
 
 public class Bishop extends Piece {
-    private char firstChar;
+    private final char firstChar;
 
     /**
      * Initializes a Bishop object with the desired color and position
@@ -35,21 +35,22 @@ public class Bishop extends Piece {
         }
         
 
-        int xDirection = start.getX() < end.getX() ? 1 : -1;
-        int yDirection = start.getY() < end.getY() ? 1 : -1;
+        int xDirection = start.getX() < end.getX() ?  1 : -1;
+        int yDirection = start.getY() < end.getY() ?  1 : -1;
 
-        int xCurrent = start.getX() * xDirection;
-        int yCurrent = start.getY() * yDirection;
-
+        int xCurrent = start.getX() + xDirection;
+        int yCurrent = start.getY() + yDirection;
+        System.out.println(board[xCurrent][yCurrent].getPiece());
         //this will check if there's any pieces in the way if there is, then the move isn't valid
         while (xCurrent != end.getX() && yCurrent != end.getY()) {
-            if (board[end.getX()][end.getY()].getPiece() != null) {
+            System.out.println(board[xCurrent][yCurrent].getPiece());
+            if (board[xCurrent][yCurrent].getPiece() != null) {
+
                 return false;
             }
             xCurrent += xDirection;
-            yCurrent += yDirection;
+            yCurrent += yDirection; 
         }
-
         return true;
     }
 

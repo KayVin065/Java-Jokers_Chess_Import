@@ -22,7 +22,7 @@ public class Pawn extends Piece {
      */
     @Override
     public boolean validMove(Spot[][] board, Spot start, Spot end, Player currentTurn) {
-        if (end.getPiece() != null && !(start.getPiece().getColor().equals(currentTurn.getColor()))) { 
+        if (end.getPiece() != null && end.getPiece().getColor().equals(start.getPiece().getColor())) { 
             return false;
             
         }
@@ -49,7 +49,9 @@ public class Pawn extends Piece {
         }
         // Capture diagonally
 
-        return Math.abs(xEnd - x) == 1 && yEnd == y + direction && end.getPiece() != null && !end.getPiece().getColor().equals(this.getColor());
+        return(Math.abs(yEnd - y) == 1 && xEnd == x + direction && end.getPiece() != null && !end.getPiece().getColor().equals(this.getColor()));
+        
+        
     }
 
     /**

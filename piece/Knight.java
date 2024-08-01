@@ -1,4 +1,3 @@
-
 /**
  * Represents a Knight piece in a chess game
  * Subclass of the Piece class

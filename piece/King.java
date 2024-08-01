@@ -1,4 +1,3 @@
-
 /**
  * Represents a King piece in a chess game
  * Subclass of the Piece class

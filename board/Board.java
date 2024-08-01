@@ -1,22 +1,11 @@
-
 /**
  * Represents a game board for a chess game
  */
 package board;
-import javax.swing.*;
 import piece.*;
 
 public class Board {
     public Spot[][] board = new Spot[8][8];
-    private Player currentTurn = null;
-
-    public void setCurrentPlayer(Player currentTurn) {
-        this.currentTurn = currentTurn;
-    }
-
-    public Player getCurrentTurn() {
-        return currentTurn;
-    }
 
     /**
      * Initializes an 8x8 board with pieces in original positions
@@ -64,7 +53,7 @@ public class Board {
      * Method to create new Piece objects for the first and last 2 rows of the board.
      * Completely resets the placement of the pieces
      */
-    public final void setOriginalPieces() {
+    public void setOriginalPieces() {
         for(int i = 0; i < 8; i++) {
             board[1][i].piece = new Pawn("black");
             board[6][i].piece = new Pawn("white");
@@ -125,38 +114,6 @@ public class Board {
         }
     }
 
-    public static int translateDisplayMove(char x) {
-        switch (x)
-        {
-            
-            case '7' -> {
-                return 1;
-            }
-            case '6' -> {
-                return 2;
-            }
-            case '5' -> {
-                return 3;
-            }
-            case '4' -> {
-                return 4;
-            }
-            case '3' -> {
-                return 5;
-            }
-            case '2' -> {
-                return 6;
-            }
-            case '1' -> {
-                return 7;
-            }
-            case '0' -> {
-                return 8;
-            }
-            default -> throw new AssertionError();
-        }
-    }
-
     /**
      * Takes in two Strings that represent the user input coordinates
      * @param input String representing the "to" and "from" coordinates as one line
@@ -173,6 +130,8 @@ public class Board {
         
     }
 
+    // translates the userInput, saves the current player spot PIECE, and calls validMove(). if move is valid, calls movePiece and returns true.
+    // if move is not valid, returns false.
     public boolean canMove(String input, Player player) {
         int fromPosy = translateMove(input.charAt(0));
         int fromPosx = translateMove(input.charAt(1));
@@ -188,25 +147,88 @@ public class Board {
             return false;
         }
     }
-}
 
-    /*
+    // returns the other team's king's position in a Spot variable (AKA board[x][y])
+    public Spot getOtherTeamKingPosition(Player currentTurn) {
 
-    public boolean isKingChecked(int fromX, int fromY, int toX, int toY) {
-        // is there a piece there? NO? return false
-        if(board[toX][toY].piece == null) {
-            return false;
+        Spot kingPosition = new Spot();
+
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                if(board[i][j].getPiece() instanceof King && !board[i][j].getPiece().getColor().equals(currentTurn.getColor())) {
+                    kingPosition = board[i][j];
+                }
+            }
         }
-        // is the piece in the desired position on the same team? YES? return false
-        if(board[toX][toY].piece.getColor() == board[fromX][fromX].piece.getColor()) {
-            return false;
-        }
-        // i
-        if(board[fromX][fromY].piece instanceof King) {
-            return false;
+        return kingPosition;
+    }
+
+        // returns the current team's king's position in a Spot variable (AKA board[x][y])
+        public Spot getTeamKingPosition(Player currentTurn) {
+
+            Spot kingPosition = new Spot();
+    
+            for(int i = 0; i < 8; i++) {
+                for(int j = 0; j < 8; j++) {
+                    if(board[i][j].getPiece() instanceof King && board[i][j].getPiece().getColor().equals(currentTurn.getColor())) {
+                        kingPosition = board[i][j];
+                    }
+                }
+            }
+            return kingPosition;
         }
 
+    // returns true if the king is currently checked, returns false otherwise
+    // Piece checkKing is only passed so it can be updated in the main code and we can know what piece is able to check the king
+    public boolean isChecked(Spot kingPosition, Player currentTurn, Piece checkKing, Spot checkKingPosition) {
+        Piece temp = null;
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                // if a spot has a piece of same color as currentTurn, and validMove() to the king's position returns true, king is checked
+                // and return true
+
+                if(board[i][j].getPiece() != null && board[i][j].getPiece().getColor().equals(currentTurn.getColor())) {
+
+                    // get temp piece for the potential piece that can check the king to pass to validMove()
+                    temp = board[i][j].getPiece();
+                    // if it can move to the king, it has the king checked
+                
+                    if(checkKing != null && checkKing.validMove(board, board[i][j], kingPosition, currentTurn) == true) {
+                        checkKing = board[i][j].getPiece();
+                        checkKingPosition = board[i][j];
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isCheckmated(Spot kingPosition, Player currentTurn, Piece checkKing, Spot checkKingPosition) {
+        // CASE1: King cannot make a move.
+        // checkPiece = current temp piece from each spot to pass to validMove() to see if it can be moved to by the King
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+    
+                if(kingPosition.getPiece().validMove(board, kingPosition, board[i][j], currentTurn)) {
+                    // if king can move to a spot (this loop checks for every spot), see if it is stil checked in that current spot. The king
+                    // must be able to not only move, but not be captured in the new position. Use checkKing in this because it holds the saved 
+                    // piece from isChecked() that is checking the king.
+                    if(isChecked(kingPosition, currentTurn, checkKing, checkKingPosition) == false) {
+                        return false;
+                    }
+                }
+                // CASE2: No piece on the King's team can capture the piece checking the King.
+                // checks if every spot on the board has a piece that is on the king's team that is capable of capturing the piece checking the king.
+                if(board[i][j].getPiece() != null && board[i][j].getPiece().getColor().equals(currentTurn.getColor()) && board[i][j].getPiece().validMove(board, board[i][j], checkKingPosition, currentTurn)) {
+                    return false;
+                }
+
+                // CASE3: A piece on the King's team can sacrifice themselves by blocking the piece checking the king from capturing it.
+                // MAY NOT IMPLEMENT, LACK OF TIME
+            }
+        }
         return true;
     }
-    */
 
+}

@@ -92,6 +92,11 @@ public class Chess {
                 // if move is valid, call isChecked()
                 if(currentTurn.getColor().equals("black"))
                 {
+                    if(board.getOtherTeamKingPosition(currentTurn).getPiece() == null || board.getTeamKingPosition(currentTurn).getPiece() == null) {
+                        JOptionPane.showMessageDialog(null, "Black wins!", "Congratulation!", JOptionPane.PLAIN_MESSAGE);
+                        end();
+                    }
+
                     kingPosition = board.getTeamKingPosition(currentTurn);
                     isKingChecked = board.isChecked(kingPosition, currentTurn, checkKing, checkKingPosition);
                     // may have conflicts if prior piece checking king no longer checks, but another piece does
@@ -115,6 +120,11 @@ public class Chess {
                 } 
                 else if(currentTurn.getColor().equals("white"))
                 {
+                    if(board.getOtherTeamKingPosition(currentTurn).getPiece() == null || board.getTeamKingPosition(currentTurn).getPiece() == null) {
+                        JOptionPane.showMessageDialog(null, "White wins!", "Congratulation!", JOptionPane.PLAIN_MESSAGE);
+                        end();
+                    }
+
                     kingPosition = board.getTeamKingPosition(currentTurn);
                     isKingChecked = board.isChecked(kingPosition, currentTurn, checkKing, checkKingPosition);
                     // may have conflicts if prior piece checking king no longer checks, but another piece does

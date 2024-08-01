@@ -1,4 +1,3 @@
-
 /**
  * Represents a Pawn piece in a chess game
  * Subclass of the Piece class
@@ -6,7 +5,6 @@
 package piece;
 import board.*;
 public class Pawn extends Piece {
-    private final char firstChar;
 
     /**
      * Initializes a Pawn object with the desired color and position
@@ -14,7 +12,6 @@ public class Pawn extends Piece {
      */
     public Pawn(String color, String unicode) {
         super(color, unicode);
-        firstChar = color.charAt(0);
     }
 
     /**
@@ -23,7 +20,7 @@ public class Pawn extends Piece {
      */
     @Override
     public boolean validMove(Spot[][] board, Spot start, Spot end, Player currentTurn) {
-        if (end.getPiece() != null && !(start.getPiece().getColor().equals(currentTurn.getColor()))) { 
+        if (end.getPiece() != null && end.getPiece().getColor().equals(start.getPiece().getColor())) { 
             return false;
             
         }
@@ -51,14 +48,7 @@ public class Pawn extends Piece {
         // Capture diagonally
 
         return(Math.abs(yEnd - y) == 1 && xEnd == x + direction && end.getPiece() != null && !end.getPiece().getColor().equals(this.getColor()));
-                
-    }
-
-    /**
-     * Overridden toString method to configure how a Pawn is output to the screen
-     */
-    @Override
-    public String toString() {
-        return " " + firstChar + "p";
+        
+        
     }
 }

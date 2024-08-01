@@ -6,7 +6,6 @@ package piece;
 import board.*;
 
 public class King extends Piece {
-    private final char firstChar;
 
     /**
      * Initializes a King object with the desired color and position
@@ -14,7 +13,6 @@ public class King extends Piece {
      */
     public King(String color, String unicode) {
         super(color, unicode);
-        firstChar = color.charAt(0);
     }
 
     public String getPieceUnicode()
@@ -26,7 +24,7 @@ public class King extends Piece {
      */
     @Override
     public boolean validMove(Spot[][] board, Spot start, Spot end, Player currentTurn) {
-        if (end.getPiece() != null && !(start.getPiece().getColor().equals(currentTurn.getColor()))) { 
+        if (end.getPiece() != null && end.getPiece().getColor().equals(start.getPiece().getColor())) { 
             return false;
         }
 
@@ -34,13 +32,5 @@ public class King extends Piece {
         int y = Math.abs(start.getY() - end.getY());
 
         return x <= 1 && y <= 1;
-    }
-
-    /**
-     * Overridden toString method to configure how a King is output to the screen
-     */
-    @Override
-    public String toString() {
-        return " " + firstChar + "K";
     }
 }

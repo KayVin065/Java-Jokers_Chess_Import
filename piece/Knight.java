@@ -6,7 +6,6 @@ package piece;
 import board.*;
 
 public class Knight extends Piece {
-    private final char firstChar;
 
     /**
      * Initializes a Knight object with the desired color and position
@@ -14,7 +13,6 @@ public class Knight extends Piece {
      */
     public Knight(String color, String unicode) {
         super(color, unicode);
-        firstChar = color.charAt(0);
     }
 
     /**
@@ -22,7 +20,7 @@ public class Knight extends Piece {
      */
     @Override
     public boolean validMove(Spot[][] board, Spot start, Spot end, Player currentTurn) {
-        if (end.getPiece() != null && !(start.getPiece().getColor().equals(currentTurn.getColor()))) { 
+        if (end.getPiece() != null && end.getPiece().getColor().equals(start.getPiece().getColor())) { 
             return false;
         }
 
@@ -30,13 +28,5 @@ public class Knight extends Piece {
         int y = Math.abs(start.getY() - end.getY());
 
         return x * y == 2;
-    }
-
-    /**
-     * Overridden toString method to configure how a Knight is output to the screen
-     */
-    @Override
-    public String toString() {
-        return " " + firstChar + "N";
     }
 }

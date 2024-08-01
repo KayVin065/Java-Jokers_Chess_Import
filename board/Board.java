@@ -13,6 +13,7 @@ import piece.*;
 public class Board {
     public Spot[][] board = new Spot[8][8];
     private Player currentTurn = null;
+    private String userInput;
 
     //
     //private String userInput = null;
@@ -20,11 +21,9 @@ public class Board {
     private final int Rows = 8;
     private final int Columns = 8;
     private final JPanel[][] chessBoardPieces = new BoardPanel[Rows][Columns];
-    //private boolean moveValid;
     // Variables to monitor the piece and piece selected
-    //private JLabel selectedPieceLabel = null;
-    //private BoardPanel selectedPiece = null;
-    //private int originalRow, originalColumn;
+    private JLabel selectedPieceLabel = null;
+    private BoardPanel selectedPiece = null;
     private final JFrame frame = new JFrame("Chess Board");
     //
     public void setCurrentPlayer(Player currentTurn)
@@ -37,7 +36,11 @@ public class Board {
         return currentTurn;
     }
 
-   
+    private JLabel getLabelFromPanel(JPanel panel) 
+    {
+        return (JLabel) panel.getComponent(0);
+    }
+
     public Board() {
         int spotNum = 0;
         for(int i = 0; i < 8; i++) {
@@ -150,7 +153,7 @@ public class Board {
         // Create the forfeit button and add it to the frame
         JButton forfeitButton = new JButton("Forfeit");
         forfeitButton.addActionListener((ActionEvent e) -> {
-            //handleForfeitButtonClick();
+            handleForfeitButtonClick();
         });
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(forfeitButton);
@@ -160,8 +163,65 @@ public class Board {
         frame.setVisible(true);
     }
 
-    
+    //handles forfeit button
+    private void handleForfeitButtonClick() 
+   {
+      int response = JOptionPane.showConfirmDialog(frame, "Are you sure you want to forfeit the game?"
+    , "Forfeit Game", JOptionPane.YES_NO_OPTION);
+    if (response == JOptionPane.YES_OPTION) 
+     {
+         //userInput = "forfeit";
+           frame.dispose();
+        }
+    }
 
+     /**
+     * Handles Mouse input and switches location of piece if mouse selects a new location
+     * @param clickedPanel
+     */
+    private void handleMouseClick(BoardPanel clickedPanel) {
+        JLabel clickedLabel = getLabelFromPanel(clickedPanel);
+    
+        if (selectedPieceLabel == null) { // no piece selected
+            if (clickedLabel != null && !clickedLabel.getText().isEmpty()) {
+                selectedPieceLabel = clickedLabel;
+                selectedPiece = clickedPanel;
+
+                if (selectedPiece != null) { // Ensure selectedPiece is not null
+                    selectedPiece.setBorder(BorderFactory.createLineBorder(Color.RED));
+                }
+            }
+        } else {
+            if (clickedPanel != selectedPiece) {
+
+                JLabel targetLabel = getLabelFromPanel(clickedPanel);
+                setMove(selectedPiece, clickedPanel);
+                if (targetLabel != null ) {
+                    targetLabel.setText(selectedPieceLabel.getText());
+                    selectedPieceLabel.setText(""); // Clears initial spot
+                }
+                if (selectedPiece != null) { // Ensure selectedPiece is not null
+                    selectedPiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                }
+                selectedPieceLabel = null;
+                selectedPiece = null;
+            }
+        }
+    }
+
+    public void setMove(BoardPanel selectedPiece, BoardPanel clickedPanel) 
+    {
+        userInput = String.valueOf(selectedPiece.getColumn());
+        userInput += String.valueOf(selectedPiece.getRow());
+        userInput += " ";
+        userInput += String.valueOf(clickedPanel.getColumn());
+        userInput += String.valueOf(clickedPanel.getRow());
+    }
+
+    public String getMove()
+    {
+        return userInput;
+    }
     
 
     /**

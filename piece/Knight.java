@@ -12,8 +12,8 @@ public class Knight extends Piece {
      * Initializes a Knight object with the desired color and position
      * @param color The color of the Knight ("white" or "black")
      */
-    public Knight(String color) { // String unicode
-        super(color);
+    public Knight(String color, String unicode) {
+        super(color, unicode);
         firstChar = color.charAt(0);
     }
 

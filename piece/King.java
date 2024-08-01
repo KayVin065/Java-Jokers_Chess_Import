@@ -12,8 +12,8 @@ public class King extends Piece {
      * Initializes a King object with the desired color and position
      * @param color The color of the King ("white" or "black")
      */
-    public King(String color) {
-        super(color);
+    public King(String color, String unicode) {
+        super(color, unicode);
         firstChar = color.charAt(0);
     }
 

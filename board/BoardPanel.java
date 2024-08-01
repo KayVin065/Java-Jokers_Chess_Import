@@ -1,10 +1,11 @@
+package board;
 import java.awt.BorderLayout;
 import javax.swing.*;
 
 public class BoardPanel extends JPanel 
 {
-    private int row;
-    private int column;
+    private final int row;
+    private final int column;
 
     public BoardPanel(int row, int column)
     {

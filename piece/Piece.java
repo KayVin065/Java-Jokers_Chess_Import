@@ -14,9 +14,9 @@ public abstract class Piece {
      * Initializes a Piece superclass object with the desired color
      * @param color the color, "white" or "black"
      */
-    public Piece(String color) {
+    public Piece(String color, String unicode) {
         this.color = color;
-        //this.unicode = unicode;
+        this.unicode = unicode;
     }
     
 

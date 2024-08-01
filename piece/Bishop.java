@@ -12,8 +12,8 @@ public class Bishop extends Piece {
      * Initializes a Bishop object with the desired color and position
      * @param color The color of the Bishop ("white" or "black")
      */
-    public Bishop(String color) {
-        super(color);
+    public Bishop(String color, String unicode) {
+        super(color, unicode);
         firstChar = color.charAt(0);
     }
 

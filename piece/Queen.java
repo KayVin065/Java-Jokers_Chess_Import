@@ -22,40 +22,38 @@ public class Queen extends Piece {
      */
     @Override
     public boolean validMove(Spot[][] board, Spot start, Spot end, Player currentTurn) {
-        if (end.getPiece() != null && !(start.getPiece().getColor().equals(currentTurn.getColor()))) { 
-            return false;
-        }
-
-        int x = Math.abs(start.getX() - end.getX());
-        int y = Math.abs(start.getY() - end.getY());
-
-        if (x == y || start.getX() == end.getX() || start.getY() == end.getY()) {
-            int xDirection = Integer.compare(end.getX(), start.getX());
-            int yDirection = Integer.compare(end.getY(), start.getY());
-
-            int xCurrent = start.getX() + xDirection;
-            int yCurrent = start.getY() + yDirection;
-
-            // Check all spots along the path to ensure there are no pieces in the way
-            while (xCurrent != end.getX() || yCurrent != end.getY()) {
-                if (board[end.getX()][end.getY()].getPiece() != null) {
-                    return false;
-                }
-                xCurrent += xDirection;
-                yCurrent += yDirection;
-            }
-
-            return true;
-        }
-
+    // Check if the end spot is occupied by a piece of the same color
+    if (end.getPiece() != null && end.getPiece().getColor().equals(start.getPiece().getColor())) {
         return false;
     }
 
-    /**
-     * Overridden toString method to configure how a Queen is output to the screen
-     */
-    @Override
-    public String toString() {
-        return " " + firstChar + "Q";
+    int xStart = start.getX();
+    int yStart = start.getY();
+    int xEnd = end.getX();
+    int yEnd = end.getY();
+
+    int xDifference = xEnd - xStart;
+    int yDifference = yEnd - yStart;
+
+    // Check for horizontal, vertical, or diagonal movement
+    if (xDifference == 0 || yDifference == 0 || Math.abs(xDifference) == Math.abs(yDifference)) {
+        int xDirection = Integer.compare(xEnd, xStart);
+        int yDirection = Integer.compare(yEnd, yStart);
+
+        int xCurrent = xStart + xDirection;
+        int yCurrent = yStart + yDirection;
+
+        // Check all spots along the path for obstruction
+        while (xCurrent != xEnd || yCurrent != yEnd) {
+            if (board[xCurrent][yCurrent].getPiece() != null) {
+                return false; // Path is obstructed
+            }
+            xCurrent += xDirection;
+            yCurrent += yDirection;
+        }
+
+        return true; // Valid move
     }
+
+    return false; // Not a valid move for a queen
 }

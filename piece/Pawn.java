@@ -22,7 +22,7 @@ public class Pawn extends Piece {
      */
     @Override
     public boolean validMove(Spot[][] board, Spot start, Spot end, Player currentTurn) {
-        if (end.getPiece() != null && !(start.getPiece().getColor().equals(currentTurn.getColor()))) { 
+        if (end.getPiece() != null && end.getPiece().getColor().equals(start.getPiece().getColor())) { 
             return false;
             
         }

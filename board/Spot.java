@@ -17,6 +17,13 @@ public class Spot {
     Piece to ease initialization. This general abstract constructor is the base for the other 2 constructors and
     is used to set the attributes that both will have in common.
     */
+    public Spot() {
+        this.x = 0;
+        this.y = 0;
+        this.piece = null;
+        this.originalPlacement = null;
+    }
+
     public Spot(int x, int y, String originalPlacement, Piece piece) {
         this.x = x;
         this.y = y;
@@ -47,6 +54,4 @@ public class Spot {
     public Piece getPiece () {
         return piece;
     }
-
-
 }

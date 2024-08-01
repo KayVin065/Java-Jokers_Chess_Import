@@ -1,3 +1,4 @@
+
 /**
  * Represents a game board for a chess game
  */
@@ -12,19 +13,22 @@ import piece.*;
 public class Board {
     public Spot[][] board = new Spot[8][8];
     private Player currentTurn = null;
-    private String userInput;
+    private String userInput = null;
+
+    //
+    //private String userInput = null;
+    //private String originalPieceText;
     private final int Rows = 8;
     private final int Columns = 8;
     private final JPanel[][] chessBoardPieces = new BoardPanel[Rows][Columns];
-
     // Variables to monitor the piece and piece selected
     private JLabel selectedPieceLabel = null;
     private BoardPanel selectedPiece = null;
     private final JFrame frame = new JFrame("Chess Board");
-    
-    public void setCurrentPlayer(Player currentTurn)
+    //
+    public void setCurrentPlayer(Player current)
     {
-        this.currentTurn = currentTurn;
+        this.currentTurn = current;
     }
 
     public Player getCurrentTurn()
@@ -84,7 +88,7 @@ public class Board {
         board[7][7].piece = new Rook("white", "\u2656");
     }
 /* 
-    \u2654 - White King
+    * \u2654 - White King
     \u2655 - White Queen
     \u2656 - White Rook
     \u2657 - White Bishop
@@ -113,7 +117,7 @@ public class Board {
                 BoardPanel panel = new BoardPanel(i, j);
 
                 // colors each tile
-                panel.setBackground((i + j) % 2 == 0 ? Color.darkGray : Color.WHITE);
+                panel.setBackground((i + j) % 2 == 0 ? Color.CYAN : Color.WHITE);
                 panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 // Creates another JLabel on top that displays chess piece
 
@@ -125,7 +129,7 @@ public class Board {
 
                 }
                 
-                piece.setFont(new Font("Serif", Font.BOLD, 32));
+                piece.setFont(new Font("Serif", Font.BOLD, 50));
                 piece.setHorizontalAlignment(JLabel.CENTER);
                 piece.setVerticalAlignment(JLabel.CENTER);
                 panel.add(piece, BorderLayout.CENTER);
@@ -162,14 +166,13 @@ public class Board {
     //handles forfeit button
     private void handleForfeitButtonClick() 
    {
-        int response = JOptionPane.showConfirmDialog(frame, "Are you sure you want to forfeit the game?"
-        , "Forfeit Game", JOptionPane.YES_NO_OPTION);
-        if (response == JOptionPane.YES_OPTION) 
-        {
-            //userInput = "forfeit";
-            frame.dispose();
-            System.exit(0);
-        }
+      int response = JOptionPane.showConfirmDialog(frame, "Are you sure you want to forfeit the game?"
+    , "Forfeit Game", JOptionPane.YES_NO_OPTION);
+    if (response == JOptionPane.YES_OPTION) 
+     {
+        setMove("forfeit");
+        frame.dispose();
+    }
     }
 
      /**
@@ -206,6 +209,11 @@ public class Board {
         }
     }
 
+    public void setMove(String move)
+    {
+        userInput = move;
+    }
+
     public void setMove(BoardPanel selectedPiece, BoardPanel clickedPanel) 
     {
         userInput = String.valueOf(selectedPiece.getColumn());
@@ -213,11 +221,26 @@ public class Board {
         userInput += " ";
         userInput += String.valueOf(clickedPanel.getColumn());
         userInput += String.valueOf(clickedPanel.getRow());
+        setMove(userInput);
     }
 
     public String getMove()
     {
         return userInput;
+    }
+    
+    public void updateBoardDisplay() {
+        for (int i = 0; i < Rows; i++) {
+            for (int j = 0; j < Columns; j++) {
+                JLabel pieceLabel = getLabelFromPanel(chessBoardPieces[i][j]);
+                Piece piece = board[i][j].getPiece();
+                if (piece != null) {
+                    pieceLabel.setText(piece.getUnicode());
+                } else {
+                    pieceLabel.setText("");
+                }
+            }
+        }
     }
 
     /**
@@ -226,84 +249,134 @@ public class Board {
      */
     public void movePiece(String input, Player player)
     {
-        int fromY = Character.getNumericValue(input.charAt(0));
-        int fromX = Character.getNumericValue(input.charAt(1)); 
+        int fromY = Character.getNumericValue(input.charAt(0));//a
+        int fromX = Character.getNumericValue(input.charAt(1)); //translateMove(input.charAt(1));
         int toY = Character.getNumericValue(input.charAt(3));
-        int toX = Character.getNumericValue(input.charAt(4));
-
+        int toX = Character.getNumericValue(input.charAt(4));//translateMove(input.charAt(4));
         Piece temp = board[fromX][fromY].getPiece();
 
         board[fromX][fromY].piece = null;
         board[toX][toY].piece = temp;
-        
+
         System.out.println();
+        
+        //display();
+        
     }
 
     public boolean canMove(String input, Player player) {
-        int fromPosy = Character.getNumericValue(input.charAt(0));
+        int fromPosy = Character.getNumericValue(input.charAt(0));//a
         int fromPosx = Character.getNumericValue(input.charAt(1)); //translateMove(input.charAt(1));
         int toPosy = Character.getNumericValue(input.charAt(3));
-        int toPosx = Character.getNumericValue(input.charAt(4)); //translateMove(input.charAt(4));
+        int toPosx = Character.getNumericValue(input.charAt(4));//translateMove(input.charAt(4));
 
         Piece temp = board[fromPosx][fromPosy].getPiece();
         Piece toTemp = board[toPosx][toPosy].getPiece();
 
-        // checks if user tries to move opponent piece
         if(temp.getColor() == null ? player.getColor() != null : !temp.getColor().equals(player.getColor()))
         {
-            return false;
+            JOptionPane.showMessageDialog(null, "Error! you cannot move your opponets piece!",
+             "Error", JOptionPane.ERROR_MESSAGE);
+             return false;
         }
-
-        // checks if player tries to take their own piece
         if(toTemp != null && temp.getColor().equals(toTemp.getColor()))
         {
+            System.out.println("Error! you cannot take your own piece!");
+            JOptionPane.showMessageDialog(null, "Error! you cannot take your own piece!", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-
-        // calls validMove for the specific piece and returns true if the move is valid
         if(temp.validMove(board, board[fromPosx][fromPosy], board[toPosx][toPosy], player))
         {
             return true;
         } 
         else 
         {
+            JOptionPane.showMessageDialog(null, "Error! wrong piece movement!", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
 
-    public boolean isKingChecked(Player currentTurn) {
-        int kingX = -1, kingY = -1;
-        
-        // Find the king's position for the current player
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                Piece piece = board[i][j].getPiece();
-                if (piece != null && piece instanceof King && piece.getColor().equals(currentTurn.getColor())) {
-                    kingX = i;
-                    kingY = j;
-                    break;
+    // returns the other team's king's position in a Spot variable (AKA board[x][y])
+    public Spot getOtherTeamKingPosition(Player currentTurn) {
+
+        Spot kingPosition = new Spot();
+
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                if(board[i][j].getPiece() instanceof King && !board[i][j].getPiece().getColor().equals(currentTurn.getColor())) {
+                    kingPosition = board[i][j];
                 }
             }
         }
-    
-        if (kingX == -1 || kingY == -1) {
-            JOptionPane.showMessageDialog(null, currentTurn.getColor() + ",You lose!!!", "booo!", JOptionPane.PLAIN_MESSAGE);
-            System.exit(1);
+        return kingPosition;
+    }
+
+        // returns the current team's king's position in a Spot variable (AKA board[x][y])
+        public Spot getTeamKingPosition(Player currentTurn) {
+
+            Spot kingPosition = new Spot();
+
+            for(int i = 0; i < 8; i++) {
+                for(int j = 0; j < 8; j++) {
+                    if(board[i][j].getPiece() instanceof King && board[i][j].getPiece().getColor().equals(currentTurn.getColor())) {
+                        kingPosition = board[i][j];
+                    }
+                }
+            }
+            return kingPosition;
         }
-    
-        // Check if any opponent piece can move to the king's position
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                Piece piece = board[i][j].getPiece();
-                if (piece != null && !piece.getColor().equals(currentTurn.getColor())) {//error could e here
-                    if (piece.validMove(board, board[i][j], board[kingX][kingY], currentTurn)) {
+
+    // returns true if the king is currently checked, returns false otherwise
+    // Piece checkKing is only passed so it can be updated in the main code and we can know what piece is able to check the king
+    public boolean isChecked(Spot kingPosition, Player currentTurn, Piece checkKing, Spot checkKingPosition) {
+        Piece temp = null;
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                // if a spot has a piece of same color as currentTurn, and validMove() to the king's position returns true, king is checked
+                // and return true
+
+                if(board[i][j].getPiece() != null && board[i][j].getPiece().getColor().equals(currentTurn.getColor())) {
+
+                    // get temp piece for the potential piece that can check the king to pass to validMove()
+                    temp = board[i][j].getPiece();
+                    // if it can move to the king, it has the king checked
+                
+                    if(checkKing != null && checkKing.validMove(board, board[i][j], kingPosition, currentTurn) == true) {
+                        checkKing = board[i][j].getPiece();
+                        checkKingPosition = board[i][j];
                         return true;
                     }
                 }
             }
         }
-    
         return false;
     }
+
+    public boolean isCheckmated(Spot kingPosition, Player currentTurn, Piece checkKing, Spot checkKingPosition) {
+        // CASE1: King cannot make a move.
+        // checkPiece = current temp piece from each spot to pass to validMove() to see if it can be moved to by the King
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+
+                if(kingPosition.getPiece().validMove(board, kingPosition, board[i][j], currentTurn)) {
+                    // if king can move to a spot (this loop checks for every spot), see if it is stil checked in that current spot. The king
+                    // must be able to not only move, but not be captured in the new position. Use checkKing in this because it holds the saved 
+                    // piece from isChecked() that is checking the king.
+                    if(isChecked(kingPosition, currentTurn, checkKing, checkKingPosition) == false) {
+                        return false;
+                    }
+                }
+                // CASE2: No piece on the King's team can capture the piece checking the King.
+                // checks if every spot on the board has a piece that is on the king's team that is capable of capturing the piece checking the king.
+                if(board[i][j].getPiece() != null && board[i][j].getPiece().getColor().equals(currentTurn.getColor()) && board[i][j].getPiece().validMove(board, board[i][j], checkKingPosition, currentTurn)) {
+                    return false;
+                }
+
+                // CASE3: A piece on the King's team can sacrifice themselves by blocking the piece checking the king from capturing it.
+                // MAY NOT IMPLEMENT, LACK OF TIME
+            }
+        }
+        return true;
+    }        
     
 }

@@ -29,6 +29,7 @@ public class Rook extends Piece {
 
         int x = start.getX();
         int y = start.getY();
+        
 
         if (x != end.getX() && y != end.getY()) {
             return false;
@@ -57,6 +58,7 @@ public class Rook extends Piece {
         }
 
         return true;
+        
     }
 
     /**

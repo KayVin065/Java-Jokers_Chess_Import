@@ -229,6 +229,19 @@ public class Board {
         return userInput;
     }
     
+    public void updateBoardDisplay() {
+        for (int i = 0; i < Rows; i++) {
+            for (int j = 0; j < Columns; j++) {
+                JLabel pieceLabel = getLabelFromPanel(chessBoardPieces[i][j]);
+                Piece piece = board[i][j].getPiece();
+                if (piece != null) {
+                    pieceLabel.setText(piece.getUnicode());
+                } else {
+                    pieceLabel.setText("");
+                }
+            }
+        }
+    }
 
     /**
      * Takes in two Strings that represent the user input coordinates
@@ -246,6 +259,7 @@ public class Board {
         board[toX][toY].piece = temp;
 
         System.out.println();
+        
         //display();
         
     }
@@ -261,7 +275,7 @@ public class Board {
 
         if(temp.getColor() == null ? player.getColor() != null : !temp.getColor().equals(player.getColor()))
         {
-            JOptionPane.showMessageDialog(null, "Error! you cannot your opponets piece!",
+            JOptionPane.showMessageDialog(null, "Error! you cannot move your opponets piece!",
              "Error", JOptionPane.ERROR_MESSAGE);
              return false;
         }

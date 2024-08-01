@@ -74,6 +74,8 @@ public class Chess {
                 board.setMove(null);
                 userInput = null;
                 board.setCurrentPlayer(currentTurn);
+                board.updateBoardDisplay();
+
                 play(currentTurn);
             }
             else
@@ -86,6 +88,7 @@ public class Chess {
                 board.setCurrentPlayer(white);
                 board.setMove(null);
                 userInput = null;
+                board.updateBoardDisplay();
                 play(white);
             }
             else if("white".equals(currentTurn.getColor()))
@@ -93,6 +96,7 @@ public class Chess {
                 board.setCurrentPlayer(black);
                 board.setMove(null);
                 userInput = null;
+                board.updateBoardDisplay();
                 play(black);
             }
             if (end()) {

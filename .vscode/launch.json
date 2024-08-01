@@ -5,13 +5,18 @@
     "version": "0.2.0",
     "configurations": 
     [
-
+        {
+            "type": "java",
+            "name": "Chess",
+            "request": "launch",
+            "mainClass": "Chess",
+            "projectName": "Java-Jokers_eabb8235"
+        },
         {
             "type": "java",
             "name": "Current File",
             "request": "launch",
-            "mainClass": "${file}",
-        
+            "mainClass": "${file}"
         },
         {
             "type": "java",

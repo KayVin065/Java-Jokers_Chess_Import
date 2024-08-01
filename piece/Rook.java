@@ -23,7 +23,8 @@ public class Rook extends Piece {
      */
     @Override
     public boolean validMove(Spot[][] board, Spot start, Spot end, Player currentTurn) {
-        if (end.getPiece() != null && !(start.getPiece().getColor().equals(currentTurn.getColor()))) { 
+        // Check if the destination has a piece of the same color
+        if (end.getPiece() != null && start.getPiece().getColor().equals(end.getPiece().getColor())) {
             return false;
         }
 

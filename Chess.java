@@ -1,20 +1,24 @@
 import board.*;
+import javax.swing.JOptionPane;
 import piece.Player;
 
 public class Chess {
     public static Board board = new Board();
     Player white;
     Player black;
-    DisplayBoard gameBoard = new DisplayBoard();
-
+    Board chessBoard = new Board();
+    public void main(String[] args) {
+    start();  
+    }
+/* */
     /**
      * Initializes the game attributes
      */
-    public void main(String[] args) {
-        gameBoard.createChessBoard();
+    public void start() 
+    {
+        chessBoard.createChessBoard();
         white = new Player("white");
         black = new Player("black");
-        board.display();
         board.setCurrentPlayer(white);
         play(white);
     }
@@ -28,64 +32,63 @@ public class Chess {
      {
         // currently outputs an infinite loop !!!
             System.out.println(currentTurn.getColor() + " player enter move: ");
-            String userInput = gameBoard.getMove();
-            while (userInput == null) {
-                userInput = gameBoard.getMove(); 
+            String userInput = board.getMove();
+            if(board.isKingChecked(currentTurn) == true)
+            {
+                JOptionPane.showMessageDialog(null, currentTurn.getColor() + ", YOUR KING IS IN CHECK!!!", "WARNING!", JOptionPane.PLAIN_MESSAGE);
+            }
+            while (userInput == null) 
+            {
+                //userInput = Board.getMove(); 
                 try {
-                    Thread.sleep(1000); // Avoid busy-waiting
+                    Thread.sleep(100); // Avoid busy-waiting
                 } catch (InterruptedException e) 
                 {
-                    e.printStackTrace();
+                   e.printStackTrace();
                 }
             }
-
+            
+                
+            
+            if("forfeit".equals(userInput))
+            {
+                if("white".equals(currentTurn.getColor()))
+                {
+                    JOptionPane.showMessageDialog(null, "Black wins!", "Congratulation!", JOptionPane.PLAIN_MESSAGE);
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "White wins!", "Congratulation!", JOptionPane.PLAIN_MESSAGE);
+                }
+                end();
+            }
+            //        JOptionPane.showMessageDialog(null, "message", "Error", JOptionPane.ERROR_MESSAGE);
             System.out.println(userInput);
             if(board.canMove(userInput, currentTurn) == false)
             {
                 System.out.println("\nERROR incorrect move");
-                board.display();
-                gameBoard.setDisplayMoveValid(false);
-                gameBoard.setMove(null);
                 board.setCurrentPlayer(currentTurn);
                 play(currentTurn);
             }
             else
-            {
+            {  
                 board.movePiece(userInput, currentTurn);
-                if("black".equals(currentTurn.getColor()))
-                {
-                    gameBoard.setDisplayMoveValid(true);
-                    gameBoard.setMove(null);
-                    board.setCurrentPlayer(white);
-                    play(white);
-                }
-                else if("white".equals(currentTurn.getColor()))
-                {
-                    gameBoard.setDisplayMoveValid(true);
-                    gameBoard.setMove(null);
-                    board.setCurrentPlayer(black);
-                    play(black);
-                }
             }
-// if statement(!isKingChecked)
-/*
+            //board.movePiece(userInput, currentTurn);
             if("black".equals(currentTurn.getColor()))
             {
-                gameBoard.setDisplayMoveValid(true);
-                gameBoard.setMove(null);
                 board.setCurrentPlayer(white);
                 play(white);
             }
             else if("white".equals(currentTurn.getColor()))
             {
-                gameBoard.setDisplayMoveValid(true);
-                gameBoard.setMove(null);
                 board.setCurrentPlayer(black);
                 play(black);
             }
-*/
-// else if the king IS checked & bamboozled we need to end the recursion
-
+            if (end()) {
+                System.out.println("Game Over.");
+                System.exit(0);
+            }
         }
     
 
@@ -97,6 +100,7 @@ public class Chess {
      */   
     public boolean end()
     {
+
         return false;
     }
 }  

@@ -5,14 +5,14 @@
 package piece;
 import board.*;
 public class Pawn extends Piece {
-    private char firstChar;
+    private final char firstChar;
 
     /**
      * Initializes a Pawn object with the desired color and position
      * @param color The color of the Pawn ("white" or "black")
      */
-    public Pawn(String color) {
-        super(color);
+    public Pawn(String color, String unicode) {
+        super(color, unicode);
         firstChar = color.charAt(0);
     }
 
@@ -47,13 +47,9 @@ public class Pawn extends Piece {
                 }
             }
         }
-
         // Capture diagonally
-        if (Math.abs(yEnd - y) == 1 && xEnd == x + direction && end.getPiece() != null && !(end.getPiece().getColor().equals(currentTurn.getColor()))) {
-            return true;
-        }
 
-        return false;
+        return Math.abs(xEnd - x) == 1 && yEnd == y + direction && end.getPiece() != null && !end.getPiece().getColor().equals(this.getColor());
     }
 
     /**

@@ -39,7 +39,8 @@ public class Rook extends Piece {
         if (x == end.getX()) {
             int min = Math.min(y, end.getY());
             int max = Math.max(y, end.getY());
-            for (int i = min + 1; i < max; i++) {
+            for (int i = min + 1; i < max; i++) 
+            {
                 if (board[end.getX()][i].getPiece() != null) 
                 {
                     return false;

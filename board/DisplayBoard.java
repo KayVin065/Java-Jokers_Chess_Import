@@ -506,33 +506,17 @@
 //                     return UNICODE_PIECES[3 + offset]; // Bishop
 //                 }
 //                 case 3 -> {
-//                     return (row == 7) ? UNICODE_PIECES[1] : UNICODE_PIECES[7]; // Queen
+                    // return (row == 7) ? UNICODE_PIECES[1] : UNICODE_PIECES[7]; // Queen
 //                 }
-//                 case 4 -> {
-//                     return (row == 7) ? UNICODE_PIECES[0] : UNICODE_PIECES[6]; // King
-//                 }
-//             }
-//         } else if (row == 1 || row == 6) {
-//             return (row == 6) ? UNICODE_PIECES[5] : UNICODE_PIECES[11]; // Pawns
-//         }
-//         return ""; // Empty space for non-piece areas
-//     }
+    //             case 4 -> {
+    //                 return (row == 7) ? UNICODE_PIECES[0] : UNICODE_PIECES[6]; // King
+    //             }
+    //         }
+    //     } else if (row == 1 || row == 6) {
+    //         return (row == 6) ? UNICODE_PIECES[5] : UNICODE_PIECES[11]; // Pawns
+    //     }
+    //     return ""; // Empty space for non-piece areas
+    // }
 
-//     private class BoardPanel extends JPanel {
-//         private final int row, column;
-
-//         public BoardPanel(int row, int column) {
-//             this.row = row;
-//             this.column = column;
-//             setLayout(new BorderLayout());
-//         }
-
-//         public int getRow() {
-//             return row;
-//         }
-
-//         public int getColumn() {
-//             return column;
-//         }
-//     }
+    
 // }

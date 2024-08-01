@@ -33,7 +33,7 @@ public class Chess {
         // currently outputs an infinite loop !!!
             System.out.println("Enter move formatted as \"[FROM] [TO]\" EX: \"E2 E4\": ");
             System.out.println(currentTurn.getColor() + " player enter move: ");
-            String userInput = "06 07";
+            String userInput = board.getMove();
             if(board.isKingChecked(currentTurn) == true)
             {
                 JOptionPane.showMessageDialog(null, currentTurn.getColor() + ", YOUR KING IS IN CHECK!!!", "WARNING!", JOptionPane.PLAIN_MESSAGE);

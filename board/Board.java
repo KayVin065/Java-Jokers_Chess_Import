@@ -25,7 +25,8 @@ public class Board {
     private JLabel selectedPieceLabel = null;
     private BoardPanel selectedPiece = null;
     private final JFrame frame = new JFrame("Chess Board");
-    //
+    private JLabel turnLabel = new JLabel("Current Turn: " + (currentTurn != null ? currentTurn.getColor() : "None"), SwingConstants.CENTER);
+    
     public void setCurrentPlayer(Player current)
     {
         this.currentTurn = current;
@@ -108,6 +109,10 @@ public class Board {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.setSize(600, 600);
+
+        //display players turn
+        turnLabel.setFont(new Font("Serif", Font.BOLD, 16));
+        frame.add(turnLabel, BorderLayout.NORTH);
 
         JPanel boardPanel = new JPanel(new GridLayout(Rows, Columns));
         // create each piece & colors the tile
@@ -209,6 +214,13 @@ public class Board {
         }
     }
 
+    public void updateTurnDisplay(Player currentTurn) {
+        if (currentTurn != null) 
+        {
+            turnLabel.setText("Current Turn: " + currentTurn.getColor());
+        } 
+    }
+
     public void setMove(String move)
     {
         userInput = move;
@@ -257,10 +269,6 @@ public class Board {
 
         board[fromX][fromY].piece = null;
         board[toX][toY].piece = temp;
-
-        System.out.println();
-        
-        //display();
         
     }
 

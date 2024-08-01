@@ -6,40 +6,33 @@ public class Chess {
     public static Board board = new Board();
     Player white;
     Player black;
-    Board chessBoard = new Board();
     public void main(String[] args) {
-    start();  
-    }
-/* */
-    /**
-     * Initializes the game attributes
-     */
-    public void start() 
-    {
-        chessBoard.createChessBoard();
+        board.createChessBoard();
         white = new Player("white");
         black = new Player("black");
         board.setCurrentPlayer(white);
-        play(white);
+        play(white);  
     }
 
     /**
      * The main loop that executes for playing the game
      * Alternates turns, checks for check/checkmate, gets moves from player
      */
-    
      public void play(Player currentTurn) 
      {
         // currently outputs an infinite loop !!!
+            System.out.println("Enter move formatted as \"[FROM] [TO]\" EX: \"E2 E4\": ");
             System.out.println(currentTurn.getColor() + " player enter move: ");
             String userInput = board.getMove();
+
             if(board.isKingChecked(currentTurn) == true)
             {
                 JOptionPane.showMessageDialog(null, currentTurn.getColor() + ", YOUR KING IS IN CHECK!!!", "WARNING!", JOptionPane.PLAIN_MESSAGE);
             }
+
             while (userInput == null) 
             {
-                //userInput = Board.getMove(); 
+                userInput = board.getMove(); 
                 try {
                     Thread.sleep(100); // Avoid busy-waiting
                 } catch (InterruptedException e) 
@@ -47,9 +40,7 @@ public class Chess {
                    e.printStackTrace();
                 }
             }
-            
-                
-            
+  
             if("forfeit".equals(userInput))
             {
                 if("white".equals(currentTurn.getColor()))
@@ -62,7 +53,8 @@ public class Chess {
                 }
                 end();
             }
-            //        JOptionPane.showMessageDialog(null, "message", "Error", JOptionPane.ERROR_MESSAGE);
+
+            //JOptionPane.showMessageDialog(null, "message", "Error", JOptionPane.ERROR_MESSAGE);
             System.out.println(userInput);
             if(board.canMove(userInput, currentTurn) == false)
             {
@@ -74,7 +66,7 @@ public class Chess {
             {  
                 board.movePiece(userInput, currentTurn);
             }
-            //board.movePiece(userInput, currentTurn);
+            
             if("black".equals(currentTurn.getColor()))
             {
                 board.setCurrentPlayer(white);
@@ -85,22 +77,21 @@ public class Chess {
                 board.setCurrentPlayer(black);
                 play(black);
             }
+
             if (end()) {
                 System.out.println("Game Over.");
                 System.exit(0);
             }
         }
-    
 
     /**
      * Ends the game and determines a winner or a draw
      * 
      * calls isCheckmate & returns true if isCheckmate returns true - determines winner
      * calls isCheck & returns true if isCheck returns true - determines draw if both are checked (eh)
-     */   
+     */ 
     public boolean end()
     {
-
         return false;
     }
 }  

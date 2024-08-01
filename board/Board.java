@@ -1,9 +1,8 @@
-
 /**
  * Represents a game board for a chess game
  */
 package board;
-import javax.swing.*;
+//import javax.swing.*;
 import piece.*;
 
 public class Board {
@@ -158,69 +157,103 @@ public class Board {
             default -> throw new AssertionError();
         }
     }
-
+    
     /**
      * Takes in two Strings that represent the user input coordinates
      * @param input String representing the "to" and "from" coordinates as one line
      */
-    public void movePiece(int fromX, int fromY, int toX, int toY, Player player)
+
+    public void movePiece(String input, Player player)
     {
+        int fromY = Character.getNumericValue(input.charAt(0)); 
+        int fromX = Character.getNumericValue(input.charAt(1)); //translateMove(input.charAt(1));
+        int toY = Character.getNumericValue(input.charAt(3));
+        int toX = Character.getNumericValue(input.charAt(4)); //translateMove(input.charAt(4));
+
+        if(canMove(input, player)) {
+            Piece temp = board[fromX][fromY].getPiece();
+
+            board[fromX][fromY].piece = null;
+            board[toX][toY].piece = temp;
+    
+            //System.out.println();
+            //display();
+        }
+
+        /*
         Piece temp = board[fromX][fromY].getPiece();
 
         board[fromX][fromY].piece = null;
         board[toX][toY].piece = temp;
+        */ 
 
         System.out.println();
         display();
         
+        
     }
 
     public boolean canMove(String input, Player player) {
-        int fromPosy = Character.getNumericValue(input.charAt(0));//a
+        int fromPosy = Character.getNumericValue(input.charAt(0));
         int fromPosx = Character.getNumericValue(input.charAt(1)); //translateMove(input.charAt(1));
         int toPosy = Character.getNumericValue(input.charAt(3));
-        int toPosx = Character.getNumericValue(input.charAt(4));//translateMove(input.charAt(4));
+        int toPosx = Character.getNumericValue(input.charAt(4)); //translateMove(input.charAt(4));
 
         Piece temp = board[fromPosx][fromPosy].getPiece();
         Piece toTemp = board[toPosx][toPosy].getPiece();
 
+        // checks if user tries to move opponent piece
         if(temp.getColor() == null ? player.getColor() != null : !temp.getColor().equals(player.getColor()))
         {
-            JOptionPane.showMessageDialog(null, "Error! you cannot your opponets piece!",
-             "Error", JOptionPane.ERROR_MESSAGE);
+            //JOptionPane.showMessageDialog(null, "Error! you cannot move your opponent's piece!",
+            //"Error", JOptionPane.ERROR_MESSAGE);
              return false;
         }
+
+        // checks if player tries to take their own piece
         if(toTemp != null && temp.getColor().equals(toTemp.getColor()))
         {
-            System.out.println("Error! you cannot take your own piece!");
-            JOptionPane.showMessageDialog(null, "Error! you cannot take your own piece!", "Error", JOptionPane.ERROR_MESSAGE);
+            //System.out.println("Error! you cannot take your own piece!");
+            //JOptionPane.showMessageDialog(null, "Error! you cannot take your own piece!", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+
+        // calls validMove for the specific piece and returns true if the move is valid
         if(temp.validMove(board, board[fromPosx][fromPosy], board[toPosx][toPosy], player))
         {
-            movePiece(fromPosx, fromPosy, toPosx, toPosy, player);
             return true;
         } else 
         {
-            JOptionPane.showMessageDialog(null, "Error! wrong piece movement!", "Error", JOptionPane.ERROR_MESSAGE);
+            //JOptionPane.showMessageDialog(null, "Error! wrong piece movement!", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
 
-    public boolean isKingChecked(int fromX, int fromY, int toX, int toY) {
-        // is there a piece there? NO? return false
-        if(board[toX][toY].piece == null) {
-            return false;
+    public boolean isKingChecked(Player currentTurn) 
+    {
+        int kingx = 0, kingy = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (!(board[i][j].piece instanceof King) && !board[i][j].piece.getColor().equals(currentTurn.getColor())) {
+                } else {
+                    //Piece temp = board[i][j].getPiece();//king for our player
+                    kingx = i;
+                    kingx = j;
+                    break;
+                }
+            }
         }
-        // is the piece in the desired position on the same team? YES? return false
-        if(board[toX][toY].piece.getColor() == null ? board[fromX][fromX].piece.getColor() == null : board[toX][toY].piece.getColor().equals(board[fromX][fromX].piece.getColor())) {
-            return false;
+        for(int i = 0; i < 8;  i++)
+        {
+            for(int j = 0; j < 8; j++)
+            {
+                Piece piece = board[i][j].piece;
+                if(piece.validMove(board, board[i][j], board[kingx][kingy], currentTurn) == true)
+                {
+                    return true;
+                }
+            }
         }
-        // i
-        if(board[fromX][fromY].piece instanceof King) {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 }

@@ -1,4 +1,3 @@
-
 /**
  * Displays the actual componets of the chess board
  * NOTE:does not communicate with rest of project yet
@@ -8,6 +7,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 
+import piece.Piece;
+import piece.Player;
+
 public class DisplayBoard {
     //defines the dimensions of the chess board
     private  String userInput = null;
@@ -15,11 +17,13 @@ public class DisplayBoard {
     private final int Rows = 8;
     private final int Columns = 8;
     private final JPanel[][] chessBoardpieces = new BoardPanel[Rows][Columns];
-    private boolean moveValid;
+    private boolean moveValid = true;
+
     //Variables to monitor the piece and piece selected
     private JLabel selectedPieceLabel = null;
     private BoardPanel selectedpiece = null;
     private int originalRow, originalColumn;
+
     //unicode for chess pieces
     private static final String[] UNICODE_PIECES = 
     {
@@ -44,9 +48,8 @@ public class DisplayBoard {
                 //colors each tile
                 panel.setBackground((i + j) % 2 == 0 ? Color.darkGray : Color.WHITE);
                 panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
                 //Creates another JLabel on top that displays chess piece
-                //idk how lines 41-43 work but i think they make it bigger and centered
-                //(i just added it from the example)
                 JLabel piece = new JLabel(getPieceUnicode(i, j));
                 piece.setFont(new Font("Serif", Font.BOLD, 32));
                 piece.setHorizontalAlignment(JLabel.CENTER);
@@ -69,6 +72,7 @@ public class DisplayBoard {
         frame.pack();
         frame.setVisible(true);
     }
+
     /**
      * Handles Mouse input and switches location of piece
      * if mouse selects a new location
@@ -93,17 +97,16 @@ public class DisplayBoard {
         }   
         else 
         {
-            // Move the piece if its different from beginnning location
-            
+            // Move the piece if it's different from beginnning location
             if (clickedPanel != selectedpiece) 
             {
 
                 JLabel targetLabel = getLabelFromPanel(clickedPanel);
                 setMove(selectedpiece, clickedPanel);
                 
-                if (targetLabel != null && getDisplayMoveValid() == true) 
+                if (targetLabel != null) 
                 {
-                    // Move the piece to the target piece
+                    // Move the piece to the target place
                     targetLabel.setText(selectedPieceLabel.getText());
                     selectedPieceLabel.setText(""); // clears initial spot
                     setDisplayMoveValid(false);
@@ -111,14 +114,22 @@ public class DisplayBoard {
                 else 
                 {
                     // Display error message if the move is invalid
+                    originalRow = selectedpiece.getRow();
+                    originalColumn = selectedpiece.getColumn();
+                    originalPieceText = selectedPieceLabel.getText();
                     resetPiecePosition();
-                }
-                //else{should display error message of some sort}
-                //this is to create a sense of movement (if that makes sense im tired)
+                } 
                 selectedpiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 selectedPieceLabel = null;
                 selectedpiece = null;
                 
+            }
+
+            // allows you to deselect a piece if you click the same piece again
+            if(clickedPanel == selectedpiece) {
+                selectedpiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                selectedPieceLabel = null;
+                selectedpiece = null;
             }
         }
     }
@@ -133,6 +144,7 @@ public class DisplayBoard {
     {
         userInput = input;
     }
+
     public void setMove(BoardPanel selectedpiece, BoardPanel clickedPanel)
     {
         userInput = String.valueOf(selectedpiece.getColumn());
@@ -142,6 +154,7 @@ public class DisplayBoard {
         userInput += String.valueOf(clickedPanel.getRow());
 
     }
+
     public void setDisplayMoveValid(boolean statement)
     {
         moveValid = statement;
@@ -157,7 +170,6 @@ public class DisplayBoard {
         return userInput;
     }
     
-
     /**
      * returns label from JPanel
      * @param panel
@@ -167,7 +179,6 @@ public class DisplayBoard {
         return (JLabel) panel.getComponent(0);
     }
 
-    //I copied this directly from example... it works so idc
     /**
      * used to provide location and unicode type for each piece
      * @param row
